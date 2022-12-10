@@ -26,65 +26,80 @@
         </div>
     </nav>
     <form>
-        <div class="form-group row">
-            <div class="row_wrap">
-                <label class="col-sm-2 col-form-label" for="customerName">Customer Name</label>
-                <div class="col-sm-4">
+
+        <div class="row_wrap">
+            <div class="putonleft"><label class="col-sm-3 col-form-label" for="customerName">Customer Name</label>
+                <div class="col-sm-5">
                     <input class="form-control" type="text" id="customerName">
                 </div>
+            </div>
 
-                <div class="col-1" style="margin-left: 30px;">
+            <div class="putonright">
+                <div class="col-1" style="margin-left: 25px;">
                     <label class="col-sm-2 col-form-label">Date</label>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                     <input type="date" id="dateoforder" class="form-control">
                 </div>
-
             </div>
 
+
         </div>
+
 
 
 
         <div class="row_wrap">
-            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Quality</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Select Quality</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-
-            <label for="orderNo.">Order No.</label>
-            <div class="col-sm-4">
-                <input class="form-control" type="number" id="orderNUmber">
+            <div class="putonleft">
+                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Quality</label>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>Select Quality</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
             </div>
+
+            <div class="putonright">
+                <label for="orderNo.">Order No.</label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="number" id="orderNUmber">
+                </div>
+            </div>
+
         </div>
         <div class="row_wrap">
-            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Colour</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Select Colour</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-        </div>
-        <div class="row_wrap">
-            <label for="orderNo.">Sr. No.</label>
-            <div class="col-sm-4">
-                <input class="form-control" type="number" id="orderNUmber" readonly>
+            <div class="putonleft">
+                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Colour</label>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>Select Colour</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </div>
+            <div class="putonright">
+                <label for="orderNo.">Sr. No.</label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="number" id="orderNUmber" readonly>
+                </div>
             </div>
         </div>
 
 
 
-        <div class="row_wrap_left">
+
+
+
+        <div class="putonleft">
             <label for="quantity">Quantity</label>
             <div class="col-sm-4">
                 <input type="number" id="quantity" class="form-control">
             </div>
 
         </div>
+
+
         <div class="row_wrap">
             <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary"></div>
 
