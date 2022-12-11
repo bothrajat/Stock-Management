@@ -35,36 +35,24 @@
             <label for="customername" class="col-sm-1 col-form-label">Customer Name</label>
             <select id="select-state" class="col-3" placeholder="Pick a state...">
                 <option value="">Select a state...</option>
-                <option value="AL">Alabama</option>
-                <option value="AK">Alaska</option>
-                <option value="AZ">Arizona</option>
-                <option value="AR">Arkansas</option>
-                <option value="CA">California</option>
-                <option value="CO">Colorado</option>
-                <option value="CT">Connecticut</option>
-                <option value="DE">Delaware</option>
-                <option value="DC">District of Columbia</option>
-                <option value="FL">Florida</option>
-                <option value="GA">Georgia</option>
-                <option value="HI">Hawaii</option>
-                <option value="ID">Idaho</option>
-                <option value="IL">Illinois</option>
-                <option value="IN">Indiana</option>
+                {% for Customer in Customers %}
+                <option value="{{ Customer.CustomerName }}">{{ Customer.CustomerName }}</option>
+                {% endfor %}
               </select>
 
             <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Quality</label>
             <select class="col-2" aria-label="Default select example" required>
-                <option value="">Search..</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="">Select Quality</option>
+                {% for Quality in Qualities %}
+                <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
+                {% endfor %}
             </select>
             <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Colour</label>
             <select class="col-2" aria-label="Default select example" required>
-                <option value="">Search..</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="">Select Colour.</option>
+                {% for Colour in Colours %}
+                <option value="{{ Colour.Colour }}">{{ Colour.Colour }}</option>
+                {% endfor %}
             </select>
         </div>
         <div>
