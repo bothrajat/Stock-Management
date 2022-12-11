@@ -26,7 +26,47 @@ class OrderList(models.Model):
 
 
 # Dying
-# Finishing
+
+# class Dyeing(models.Model):
+#     Dyer=models.CharField(max_length=256, unique=True)
+
+# class Finishing(models.Model):
+#     Finisher = models.CharField(max_length=256, unique=True)
+
+# class Typeofplace(models.Model):
+#     Type = models.CharField(max_length=32, unique=True)
+
+# class Stock(models.Model):
+#     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+#     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
+#     Quantity = models.PositiveIntegerField()
+#     Type = models.ForeignKey(Typeofplace, on_delete=models.DO_NOTHING)
+#     Name = models.CharField(max_length=256)
+
+# class DyeingStock(models.Model):
+#     DyeingCompany = models.ForeignKey(Dyeing, on_delete=models.DO_NOTHING)
+    # Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+    # Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
+    # Quantity = models.PositiveIntegerField()
+# # Finishing
+
+
+# class FinishingStock(models.Model):
+#     FinishingCompany = models.ForeignKey(Finishing, on_delete=models.DO_NOTHING)
+#     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+#     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
+#     Quantity = models.PositiveIntegerField()
+
+
+# class OfficeStock(models.Model):
+#     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+#     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
+#     Quantity = models.PositiveIntegerField()
+
+# class FactoryStock(models.Model):
+#     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+#     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
+#     Quantity = models.PositiveIntegerField()
 
 """create table quality(qual varchar(256) primary key);
 create table colour(col varchar(256) primary key);
