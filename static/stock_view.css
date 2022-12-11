@@ -39,11 +39,13 @@ form {
 }
 
 .row_wrap {
-  width: 100vw;
+  width: 90vw;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 
 .row_wrap>label {
@@ -61,8 +63,8 @@ form {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: 6vw;
+  margin-right: 6vw;
 }
 .putonleft{
   width: 70vw;
@@ -93,5 +95,62 @@ form {
   width: 250px;
 }
 .putonright select {
+  width: 250px;
+}
+.dwrap {
+  display: flex;
+  flex-direction: row;
+}
+.dwrap .row_wrap_left table{
+  width: 43vw;
+  margin-left: 5vw;
+  margin-right: 2vw;
+}
+.dwrap .row_wrap_right table{
+  width: 43vw;
+  margin-right: 5vw;
+  margin-left: 2vw;
+}
+.dwrap>div:nth-child(1){
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.row_wrap_left {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.row_wrap_left .leftt {
+  text-align: left;
+  margin-left: -33vw;
+  margin-bottom: -3vw;
+  font-size:large;
+}
+
+.row_wrap_left select {
+  width: 250px;
+}
+.row_wrap_right {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+  justify-content: space-evenly;
+
+}
+
+.row_wrap_right .leftt {
+  text-align: left;
+  margin-left: 2vw;
+  margin-bottom: -3vw;
+  font-size:large;
+}
+
+.row_wrap_right select {
   width: 250px;
 }
