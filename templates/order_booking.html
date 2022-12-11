@@ -1,3 +1,5 @@
+{% load static %}
+
 <html>
 
 <head>
@@ -6,11 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="C:\Users\bothr\PycharmProjects\Stock-Management\static\order_booking.css" />
-
-    <style>
-        
-    </style>
+    <link rel="stylesheet" href="{% static 'order_booking.css' %}" />
 </head>
 
 <body>
@@ -30,155 +28,144 @@
         </div>
     </nav>
     <div class="colss">
-    <form>
-        <div class="row_wrap">
-            <div class="col-sm-1" style="margin-left: 25px;">
-                <label for="orderNo.">Sr. No.</label>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row_wrap">
+                <div class="col-sm-1" style="margin-left: 25px;">
+                    <label for="SerialNo">Serial No.</label>
+                </div>
+
+                <div class="col-sm-2">  
+                    <input class="form-control" type="text" name="SerialNo" value="{{SerialNo}}" readonly>
+                </div>
+
+                <div class="col-sm-1" style="margin-left: 25px;">
+                    <label for="OrderNo">Order No.</label>
+                </div>
+
+                <div class="col-sm-2">
+                    <input class="form-control" type="number" name="OrderNo" value="{{OrderNo}}" required placeholder="Order No." min="1"
+                        required>
+                </div>
+
+                <div class="col-1" style="margin-left: 25px">
+                    <label class="col-sm-2 col-form-label">Date</label>
+                </div>
+
+                <div class="col-sm-2">
+                    <input type="date" name="Date" id="dateoforder" value="{{Date}}" class="form-control" required>
+                </div>
             </div>
 
-            <div class="col-sm-2">
-                <input class="form-control" type="number" id="orderNUmber" readonly>
-            </div>
-
-            <div class="col-sm-1" style="margin-left: 25px;">
-                <label for="orderNo.">Order No.</label>
-            </div>
-
-            <div class="col-sm-2">
-                <input class="form-control" type="number" id="orderNUmber" required placeholder="Order No.">
-            </div>
-
-            <div class="col-1" style="margin-left: 25px">
-                <label class="col-sm-2 col-form-label">Date</label>
-            </div>
-            <div class="col-sm-2">
-                <input type="date" id="dateoforder" class="form-control" required>
-            </div>
-
-        </div>
-        <div class="dwrap">
-
-            <div>
-                <div class="row_wrap">
-                    <div class="putonleft"><label class="col-sm-5 col-form-label" for="customerName">Customer
-                            Name</label>
-                        <div class="col-12">
-                            <input class="form-control" type="text" id="customerName" required
-                                placeholder="Customer Name">
+            <div class="dwrap">
+                <div>
+                    <div class="row_wrap">
+                        <div class="putonleft"><label class="col-sm-5 col-form-label" for="CustomerName">Customer
+                                Name</label>
+                            <div class="col-12">
+                                <input class="form-control" type="text" name="CustomerName" value="{{CustomerName}}" required
+                                    placeholder="Customer Name">
+                            </div>
+                        </div>
+                        <div class="putonright">
                         </div>
                     </div>
 
-                    <div class="putonright">
-
-                    </div>
-
-
-                </div>
-
-
-
-
-                <div class="row_wrap">
-                    <div class="putonleft">
-                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Quality</label>
-                        <select class="form-select" aria-label="Default select example" required
-                            style="margin-left: 68px;">
-                            <option selected>Select Quality</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-
-                    <div class="putonright">
-
-                    </div>
-
-                </div>
-                <div class="row_wrap">
-                    <div class="putonleft">
-                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Colour</label>
-                        <select class="form-select" aria-label="Default select example" required
-                            style="margin-left: 69px;">
-                            <option selected>Select Colour</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-                    <div class="putonright">
-                    </div>
-                </div>
-
-
-
-
-
-                <div class="row_wrap">
-                    <div class="putonleft">
-                        <label for="quantity" class="my-1 mr-2">Quantity</label>
-                        <div class="col-sm-7">
-                            <input type="number" id="quantity" class="form-control" required placeholder="Quantity"
-                                style="margin-left: 55px;">
+                    <div class="row_wrap">
+                        <div class="putonleft">
+                            <label class="my-1 mr-2" for="Quality">Quality</label>
+                            <select class="form-select" name="Quality" aria-label="Default select example" required
+                                style="margin-left: 68px;"> 
+                                {% for Quality in Qualities %}
+                                <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
+                        <div class="putonright">
+                        </div>
+                    </div>
 
+                    <div class="row_wrap">
+                        <div class="putonleft">
+                            <label class="my-1 mr-2" for="Colour">Colour</label>
+                            <select class="form-select" name="Colour" aria-label="Default select example" required
+                                style="margin-left: 69px;">
+                                {% for Colour in Colours %}
+                                <option value="{{ Colour.Colour }}">{{ Colour.Colour }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="putonright">
+                        </div>
                     </div>
-                    <div class="putonright">
+
+                    <div class="row_wrap">
+                        <div class="putonleft">
+                            <label class="my-1 mr-2" for="Quantity">Quantity</label>
+                            <div class="col-sm-7">
+                                <input type="number" name="Quantity" class="form-control" min="1" required
+                                    placeholder="Quantity" style="margin-left: 55px;">
+                            </div>
+                        </div>
+                        <div class="putonright">
+                        </div>
                     </div>
+                    <input type="hidden" name="OrderList" value="{{ OrderList }}">
+                    <input type="hidden" name="ID" value="">
+                </div>
+
+                <div>
+                    <table class="table table-striped table-dark table-hover table-bordered" style="float: right;">
+                        {% if OrderList %}
+                        <thead>
+                            <tr>
+                                <th scope="col">Selection</th>
+                                <th scope="col">Quality</th>
+                                <th scope="col"> Colour</th>
+                                <th scope="col">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for key,Order in OrderList.items %}
+                            <tr>
+                                <td><input type="radio" value="{{key}}" class="form-check-input"></td>
+                                <td>{{Order.Quality}}</td>
+                                <td>{{Order.Colour}}</td>
+                                <td>{{Order.Quantity}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% endif %}
+                    </table>
                 </div>
             </div>
-            <div>
 
-                <table class="table table-striped table-dark table-hover table-bordered" style="float: right;">
-                    <thead>
-                        <tr>
-                            <th scope="col">Selection</th>
-                            <th scope="col">Quality</th>
-                            <th scope="col"> Colour</th>
-                            <th scope="col">Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        <tr>
-                            <td><input type="radio" class="form-check-input"></td>
-                            <td>2" Super</td>
-                            <td>Red</td>
-                            <td>1500</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="row_wrap">
+                <div class="row_">
+                    <input type="submit" value="SAVE" name="save" class="btn btn-outline-secondary">
+                </div>
+                <div class="row_">
+                    <input type="submit" value="EDIT" class="btn btn-outline-secondary">
+                </div>
+                <div class="row_">
+                    <input type="submit" value="REMOVE" name="remove" class="btn btn-outline-secondary">
+                </div>
+                <div class="row_">
+                    <input type="submit" value="SUBMIT" name="submit" class="btn btn-outline-secondary">
+                </div>
+                <div class="row_">
+                    <input type="reset" value="CLEAR" class="btn btn-outline-secondary">
+                </div>
             </div>
-        </div>
+        </form>
+    </div>
 
-
-        <div class="row_wrap">
-            <div class="row_"><input type="submit" value="SAVE" class="btn btn-outline-secondary"></div>
-
-            <div class="row_">
-                <input type="submit" value="EDIT" class="btn btn-outline-secondary">
-            </div>
-            <div class="row_">
-                <input type="submit" value="REMOVE" class="btn btn-outline-secondary">
-            </div>
-            <div class="row_">
-                <input type="submit" value="SUBMIT" class="btn btn-outline-secondary">
-            </div>
-            <div class="row_">
-                <input type="reset" value="CLEAR" class="btn btn-outline-secondary">
-            </div>
-        </div>
-
-
-
-    </form>
-</div>
     <script>
         let dte = new Date();
         let date_now = dte.toJSON().split('T')[0];
-
         document.getElementById('dateoforder').value = date_now;
-
     </script>
+
 </body>
 
 </html>
