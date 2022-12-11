@@ -32,36 +32,38 @@
   <form>
     <div class="row_wrap">
       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Quality</label>
-      <select class="col-3" aria-label="Default select example" required>
+      <select class="col-3" aria-label="Default select example" required name="Quality">
         <option value="">Select Quality</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+            {% for Quality in Qualities %}
+            <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
+            {% endfor %}
+            
       </select>
     </div>
     <div class="row_wrap">
       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Colour</label>
-      <select class="col-3" aria-label="Default select example" required>
+      <select class="col-3" aria-label="Default select example" required name="Colour">
         <option value="">Select Colour</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+                {% for Colour in Colours %}
+                <option value="{{ Colour.Colour }}">{{ Colour.Colour}}</option>
+                {% endfor %}
+            
       </select>
     </div>
 
     <div class="row_wrap">
       <label for="quantity">Quantity</label>
       <div class="col-sm-3">
-          <input type="number" id="quantity" class="form-control" required>
+          <input type="number" id="quantity" class="form-control" required name="Quantity">
       </div>
 
   </div>
 
     <div class="row_wrap">
-      <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary"></div>
+      <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary" ></div>
 
       <div class="row_">
-        <input type="submit" value="SUBMIT" class="btn btn-outline-secondary">
+        <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit">
       </div>
     </div>
   </form>

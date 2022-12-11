@@ -87,4 +87,13 @@ def stock_movement(request):
 
 
 def production_input(request):
+    Qualities = Quality.objects.all()
+    Colours = Colour.objects.all()
+    if request.method =="POST":
+        if request.POST.get("submit"):
+            data[FactoryStock][data[ID]]={
+                
+            }
+
+
     return render(request, "production-input.html")
