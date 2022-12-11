@@ -69,7 +69,7 @@ def order_booking(request):
             "SerialNo": SerialNo,
             "Colours": Colours,
             "Qualities": Qualities,
-            "Customer": Customers,
+            "Customers": Customers,
         },
     )
 

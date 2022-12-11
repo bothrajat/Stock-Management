@@ -9,6 +9,13 @@
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <link rel="stylesheet" href="{% static 'order_booking.css' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
+        integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+        integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+
 </head>
 
 <body>
@@ -35,7 +42,7 @@
                     <label for="SerialNo">Serial No.</label>
                 </div>
 
-                <div class="col-sm-2">  
+                <div class="col-sm-2">
                     <input class="form-control" type="text" name="SerialNo" value="{{SerialNo}}" readonly>
                 </div>
 
@@ -44,8 +51,8 @@
                 </div>
 
                 <div class="col-sm-2">
-                    <input class="form-control" type="number" name="OrderNo" value="{{OrderNo}}" required placeholder="Order No." min="1"
-                        required>
+                    <input class="form-control" type="number" name="OrderNo" value="{{OrderNo}}" required
+                        placeholder="Order No." min="1" required>
                 </div>
 
                 <div class="col-1" style="margin-left: 25px">
@@ -63,8 +70,13 @@
                         <div class="putonleft"><label class="col-sm-5 col-form-label" for="CustomerName">Customer
                                 Name</label>
                             <div class="col-12">
-                                <input class="form-control" type="text" name="CustomerName" value="{{CustomerName}}" required
-                                    placeholder="Customer Name">
+                                <select class="col-11" name="CustomerName" value="{{CustomerName}}" aria-label="Default select example" required
+                                    style="margin-left: 80px;">
+                                    <option value="">Select Customer.</option>
+                                    {% for Customer in Customers %}
+                                    <option value="{{ Customer.CustomerName }}">{{ Customer.CustomerName }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="putonright">
@@ -73,9 +85,10 @@
 
                     <div class="row_wrap">
                         <div class="putonleft">
-                            <label class="my-1 mr-2" for="Quality">Quality</label>
-                            <select class="form-select" name="Quality" aria-label="Default select example" required
-                                style="margin-left: 68px;"> 
+                            <label class="my-1 mr-2" for="Quality" style="margin-right: 80px;">Quality</label>
+                            <select class="col-8" name="Quality" aria-label="Default select example" required
+                                style="margin-left: 80px;">
+                                <option value="">Select Quality.</option>
                                 {% for Quality in Qualities %}
                                 <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
                                 {% endfor %}
@@ -87,9 +100,10 @@
 
                     <div class="row_wrap">
                         <div class="putonleft">
-                            <label class="my-1 mr-2" for="Colour">Colour</label>
-                            <select class="form-select" name="Colour" aria-label="Default select example" required
-                                style="margin-left: 69px;">
+                            <label class="my-1 mr-2" for="Colour" style="margin-right: 80px;">Colour</label>
+                            <select class="col-8" name="Colour" aria-label="Default select example" required
+                                style="margin-left: 80px;">
+                                <option value="">Select Colour.</option>
                                 {% for Colour in Colours %}
                                 <option value="{{ Colour.Colour }}">{{ Colour.Colour }}</option>
                                 {% endfor %}
@@ -145,7 +159,7 @@
                     <input type="submit" value="SAVE" name="save" class="btn btn-outline-secondary">
                 </div>
                 <div class="row_">
-                    <input type="submit" value="EDIT" class="btn btn-outline-secondary">
+                    <button type="button" id="edit" class="btn btn-outline-secondary"> EDIT</button>
                 </div>
                 <div class="row_">
                     <input type="submit" value="REMOVE" name="remove" class="btn btn-outline-secondary">
@@ -167,5 +181,12 @@
     </script>
 
 </body>
+<script>
+    $(document).ready(function () {
+        $('select').selectize({
+            sortField: 'text'
+        });
+    });
+</script>
 
 </html>
