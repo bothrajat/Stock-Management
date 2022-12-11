@@ -12,12 +12,14 @@ class Quality(models.Model):
 class Colour(models.Model):
     Colour = models.CharField(max_length=32, primary_key=True)
 
-
 class Order(models.Model):
+    OrderNo=models.IntegerField(unique=True)
+
+class OrderList(models.Model):
     Customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
-    OrderNo = models.PositiveBigIntegerField()
+    Order = models.ForeignKey(Order,on_delete=models.DO_NOTHING)
     OrderedQuantity = models.PositiveIntegerField()
     BalanceQuantity = models.PositiveIntegerField()
     Date = models.DateField()
