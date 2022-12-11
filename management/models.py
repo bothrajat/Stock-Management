@@ -3,7 +3,6 @@ from django.db import models
 # Create your models here.
 class Customer(models.Model):
     CustomerName = models.CharField(max_length=256)
-    City = models.CharField(max_length=32)
 
 
 class Quality(models.Model):
@@ -13,14 +12,18 @@ class Quality(models.Model):
 class Colour(models.Model):
     Colour = models.CharField(max_length=32, primary_key=True)
 
-
 class Order(models.Model):
+    OrderNo=models.IntegerField(unique=True)
+
+class OrderList(models.Model):
     Customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+    Order = models.ForeignKey(Order,on_delete=models.DO_NOTHING)
     OrderedQuantity = models.PositiveIntegerField()
     BalanceQuantity = models.PositiveIntegerField()
     Date = models.DateField()
+
 
 # Dying
 # Finishing
