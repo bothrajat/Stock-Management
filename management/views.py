@@ -60,6 +60,7 @@ def order_booking(request):
                 **data,
                 "Colours": Colours,
                 "Qualities": Qualities,
+                "Customers": Customers,
             },
         )
     return render(
