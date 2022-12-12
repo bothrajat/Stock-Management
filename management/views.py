@@ -76,25 +76,68 @@ def order_booking(request):
 
 
 def stock_view(request):
-    return render(request, "stock-view.html")
+    return render(request, "stock_view.html")
 
 
 def consumption_record(request):
-    return render(request, "consumption-record.html")
+    return render(request, "consumption_record.html")
 
 
 def stock_movement(request):
-    return render(request, "stock-movement.html")
+     
+    Qualities = Quality.objects.all()
+    Colours = Colour.objects.all()
+    Dyers = Dyer.objects.all()
+    Finishers = Finisher.objects.all()
+    if request.method=="POST":
+        data={}
+        data["StockList"] = request.POST.get("stocklist")
+        data["ID"] = request.POST.get("ID")
+        data["quality"]=request.POST.get("Quality")
+        data["colour"]= request.POST.get("Colour")
+        data["Quantity"]= int(request.POST.get("Quantity", 0))
+        data["FromType"] = request.POST.get("fromtype")
+        data["FromName"] = request.POST.get("fromName")
+        data["ToType"] = request.POST.get("totype")
+        data["ToName"] = request.POST.get("toName")
+        if not StockList:
+            StockList = {}
+            ID = 1
+        else:
+            StockList = ast.literal_eval(StockList)
+            if not ID:
+                ID = max(StockList.keys()) + 1
+            else:
+                ID = int(ID)
+
+        if request.POST.get("save"):
+            data["StockList"][data["ID"]] = {
+                "Quality": data["Quality"],
+                "Colour": data["Colour"],
+                "Quantity": data["Quantity"],
+            }
+
+    return render(request, "stock_movement.html")
 
 
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
     if request.method =="POST":
-        if request.POST.get("submit"):
-            data[FactoryStock][data[ID]]={
-                
-            }
+        quality=request.POST.get("Quality")
+        colour= request.POST.get("Colour")
+        Quantity= int(request.POST.get("Quantity", 0))
+        try:
+            stocks=FactoryStock.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour)) 
+            stocks.Quantity+=Quantity
+            stocks.save()
 
-
-    return render(request, "production-input.html")
+        except :
+           stock = FactoryStock()
+           stock.Quality = Quality.objects.get(Quality=quality)
+           stock.Colour=Colour.objects.get(Colour=colour)
+           stock.Quantity=Quantity
+           stock.save()
+         
+    return render (request, "production_record.html", context={"Colours": Colours,
+            "Qualities": Qualities})
