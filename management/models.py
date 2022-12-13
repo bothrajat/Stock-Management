@@ -24,6 +24,12 @@ class OrderList(models.Model):
     BalanceQuantity = models.PositiveIntegerField()
     Date = models.DateField()
 
+class Office(models.Model):
+    Name=models.CharField(max_length=10, unique=True)
+
+class Factory(models.Model):
+    Name=models.CharField(max_length=20, unique=True)
+
 class Dyer(models.Model):
     Name=models.CharField(max_length=256, unique=True)
 

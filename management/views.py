@@ -76,7 +76,14 @@ def order_booking(request):
 
 
 def stock_view(request):
-    return render(request, "stock_view.html")
+    FactStock = FactoryStock.objects.all()
+    OffStock = OfficeStock.objects.all()
+    DyeStock = DyeingStock.objects.all()
+    Orders = OrderList.objects.all()
+    FinStock = FinishingStock.objects.all()
+
+
+    return render(request, "stock_view.html", context={"FactStock":FactStock, "OffStock":OffStock, "DyeStock":DyeStock, "Orders":Orders, "FinStock":FinStock})
 
 
 def consumption_record(request):
