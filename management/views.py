@@ -12,23 +12,28 @@ def home(request):
 def collect(request):
     OrderList = request.POST.get("OrderList")
     ID = request.POST.get("ID")
-    if not OrderList:
-        OrderList = {}
-        ID = 1
+    Quantity = request.POST.get("Quantity")
+    if Quantity:
+        Quantity = int(Quantity)
     else:
+        Quantity = 0
+    if OrderList and OrderList != "{}":
         OrderList = ast.literal_eval(OrderList)
         if not ID:
             ID = max(OrderList.keys()) + 1
         else:
             ID = int(ID)
+    else:
+        OrderList = {}
+        ID = 1
     return {
         "SerialNo": int(request.POST.get("SerialNo")),
-        "OrderNo": request.POST.get("OrderNo"),
+        "OrderNo": int(request.POST.get("OrderNo")),
         "Date": request.POST.get("Date"),
         "CustomerName": request.POST.get("CustomerName"),
         "Quality": request.POST.get("Quality"),
         "Colour": request.POST.get("Colour"),
-        "Quantity": int(request.POST.get("Quantity", 0)),
+        "Quantity": Quantity,
         "OrderList": OrderList,
         "ID": ID,
     }
@@ -39,6 +44,12 @@ def order_booking(request):
     Colours = Colour.objects.all()
     Customers = Customer.objects.all()
     SerialNo = Order.objects.count() + 1
+    context = {
+        "SerialNo": SerialNo,
+        "Colours": Colours,
+        "Qualities": Qualities,
+        "Customers": Customers,
+    }
     if request.method == "POST":
         data = collect(request)
 
@@ -50,9 +61,23 @@ def order_booking(request):
             }
 
         elif request.POST.get("remove"):
-            pass
+            del data["OrderList"][data["ID"]]
+
         elif request.POST.get("submit"):
-            pass
+            order = Order.objects.create(OrderNo=data["OrderNo"])
+            customer = Customer.objects.get(CustomerName=data["CustomerName"])
+            Date = data["Date"]
+            for key, value in data["OrderList"].items():
+                OrderList_obj = OrderList()
+                OrderList_obj.Customer = customer
+                OrderList_obj.Colour = Colour.objects.get(Colour=value["Colour"])
+                OrderList_obj.Quality = Quality.objects.get(Quality=value["Quality"])
+                OrderList_obj.Order = order
+                OrderList_obj.OrderedQuantity = value["Quantity"]
+                OrderList_obj.BalanceQuantity = value["Quantity"]
+                OrderList_obj.Date = Date
+                OrderList_obj.save()
+            return redirect('order-booking')
         return render(
             request,
             "order_booking.html",
@@ -60,17 +85,14 @@ def order_booking(request):
                 **data,
                 "Colours": Colours,
                 "Qualities": Qualities,
-                "Customers": Customers,
+                **context,
             },
         )
     return render(
         request,
         "order_booking.html",
         context={
-            "SerialNo": SerialNo,
-            "Colours": Colours,
-            "Qualities": Qualities,
-            "Customers": Customers,
+            **context,
         },
     )
 

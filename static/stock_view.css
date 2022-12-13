@@ -163,10 +163,13 @@ form {
   width: 50%;
   padding: 5px;
 }
-/* table{
+
+/* 
+table{
   counter-reset: Serial;
 }
 tr td:first-child:before {
-  counter-increment: Serial; /* Increment the Serial counter */
-  content: "" counter(Serial); /* Display the counter */
-}    */
+  counter-increment: Serial;
+  content: "" counter(Serial);
+}
+ */
