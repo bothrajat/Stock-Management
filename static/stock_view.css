@@ -47,6 +47,11 @@ form {
   margin-left: 5vw;
   margin-right: 5vw;
 }
+.row_wrap table{
+  width: 42vw;
+  margin-left: 4vw;
+  margin-right: 4vw;
+}
 
 .row_wrap>label {
   margin-right: 10px;
@@ -100,16 +105,15 @@ form {
 .dwrap {
   display: flex;
   flex-direction: row;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
-.dwrap .row_wrap_left table{
-  width: 43vw;
+.dwrap>table{
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
   margin-left: 5vw;
   margin-right: 2vw;
-}
-.dwrap .row_wrap_right table{
-  width: 43vw;
-  margin-right: 5vw;
-  margin-left: 2vw;
 }
 .dwrap>div:nth-child(1){
   height: 50vh;
@@ -128,7 +132,6 @@ form {
 .row_wrap_left .leftt {
   text-align: left;
   margin-left: -33vw;
-  margin-bottom: -3vw;
   font-size:large;
 }
 
@@ -154,3 +157,19 @@ form {
 .row_wrap_right select {
   width: 250px;
 }
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* 
+table{
+  counter-reset: Serial;
+}
+tr td:first-child:before {
+  counter-increment: Serial;
+  content: "" counter(Serial);
+}
+ */

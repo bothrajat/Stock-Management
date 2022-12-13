@@ -17,52 +17,56 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        
       <div class="navbar-nav">
-          <a class="nav-item nav-link" href="/management/order-booking/">Order Booking</a>
-          <a class="nav-item nav-link" href="/management/stock-view/">Stock View</a>
-          <a class="nav-item nav-link" href="/management/consumption-record/">Consumption Record</a>
-          <a class="nav-item nav-link" href="/management/stock-movement/">Stock Movement</a>
-          <a class="nav-item nav-link active" href="/management/production-input/">Production Input</a>
+        <a class="nav-item nav-link active" href="/management/order-booking/">Order Booking</a>
+        <a class="nav-item nav-link" href="/management/stock-view/">Stock View</a>
+        <a class="nav-item nav-link" href="/management/consumption-record/">Consumption Record</a>
+        <a class="nav-item nav-link" href="/management/stock-movement/">Stock Movement</a>
+        <a class="nav-item nav-link" href="/management/production-input/">Production Input</a>
       </div>
-  </div>
-  </nav>
-  <form>
+    </div>
+</nav>
+  <form method="POST">
+    {% csrf_token %}
     <div class="row_wrap">
       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Quality</label>
-      <select class="col-3" aria-label="Default select example" required>
+      <select class="col-3" aria-label="Default select example" required name="Quality">
         <option value="">Select Quality</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+            {% for Quality in Qualities %}
+            <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
+            {% endfor %}
+            
       </select>
     </div>
     <div class="row_wrap">
       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Colour</label>
-      <select class="col-3" aria-label="Default select example" required>
+      <select class="col-3" aria-label="Default select example" required name="Colour">
         <option value="">Select Colour</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+                {% for Colour in Colours %}
+                <option value="{{ Colour.Colour }}">{{ Colour.Colour}}</option>
+                {% endfor %}
+            
       </select>
     </div>
 
     <div class="row_wrap">
       <label for="quantity">Quantity</label>
       <div class="col-sm-3">
-          <input type="number" id="quantity" class="form-control" required>
+          <input type="number" id="quantity" class="form-control" required name="Quantity">
       </div>
 
   </div>
 
     <div class="row_wrap">
-      <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary"></div>
+      <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary" ></div>
 
       <div class="row_">
-        <input type="submit" value="SUBMIT" class="btn btn-outline-secondary">
+        <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit">
       </div>
     </div>
   </form>

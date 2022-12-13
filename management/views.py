@@ -98,7 +98,14 @@ def order_booking(request):
 
 
 def stock_view(request):
-    return render(request, "stock_view.html")
+    FactStock = FactoryStock.objects.all()
+    OffStock = OfficeStock.objects.all()
+    DyeStock = DyeingStock.objects.all()
+    Orders = OrderList.objects.all()
+    FinStock = FinishingStock.objects.all()
+
+
+    return render(request, "stock_view.html", context={"FactStock":FactStock, "OffStock":OffStock, "DyeStock":DyeStock, "Orders":Orders, "FinStock":FinStock})
 
 
 def consumption_record(request):
@@ -106,8 +113,60 @@ def consumption_record(request):
 
 
 def stock_movement(request):
+     
+    Qualities = Quality.objects.all()
+    Colours = Colour.objects.all()
+    Dyers = Dyer.objects.all()
+    Finishers = Finisher.objects.all()
+    if request.method=="POST":
+        data={}
+        data["StockList"] = request.POST.get("stocklist")
+        data["ID"] = request.POST.get("ID")
+        data["quality"]=request.POST.get("Quality")
+        data["colour"]= request.POST.get("Colour")
+        data["Quantity"]= int(request.POST.get("Quantity", 0))
+        data["FromType"] = request.POST.get("fromtype")
+        data["FromName"] = request.POST.get("fromName")
+        data["ToType"] = request.POST.get("totype")
+        data["ToName"] = request.POST.get("toName")
+        if not StockList:
+            StockList = {}
+            ID = 1
+        else:
+            StockList = ast.literal_eval(StockList)
+            if not ID:
+                ID = max(StockList.keys()) + 1
+            else:
+                ID = int(ID)
+
+        if request.POST.get("save"):
+            data["StockList"][data["ID"]] = {
+                "Quality": data["Quality"],
+                "Colour": data["Colour"],
+                "Quantity": data["Quantity"],
+            }
+
     return render(request, "stock_movement.html")
 
 
 def production_input(request):
-    return render(request, "production_record.html")
+    Qualities = Quality.objects.all()
+    Colours = Colour.objects.all()
+    if request.method =="POST":
+        quality=request.POST.get("Quality")
+        colour= request.POST.get("Colour")
+        Quantity= int(request.POST.get("Quantity", 0))
+        try:
+            stocks=FactoryStock.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour)) 
+            stocks.Quantity+=Quantity
+            stocks.save()
+
+        except :
+           stock = FactoryStock()
+           stock.Quality = Quality.objects.get(Quality=quality)
+           stock.Colour=Colour.objects.get(Colour=colour)
+           stock.Quantity=Quantity
+           stock.save()
+         
+    return render (request, "production_record.html", context={"Colours": Colours,
+            "Qualities": Qualities})
