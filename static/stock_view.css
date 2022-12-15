@@ -164,7 +164,7 @@ form {
   padding: 5px;
 }
 
-/* 
+
 table{
   counter-reset: Serial;
 }
@@ -172,4 +172,4 @@ tr td:first-child:before {
   counter-increment: Serial;
   content: "" counter(Serial);
 }
- */
+

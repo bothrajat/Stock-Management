@@ -56,28 +56,7 @@
             </div>
         </nav>
         <div class="colss">
-            <form method="POST">
-                {% csrf_token %}
-                <div class="row_wrap">
-                    <div class="col-sm-1" style="margin-left: 25px;">
-                        <label for="SerialNo">Serial No.</label>
-                    </div>
-                    <div class="col-sm-2">
-                        <input class="form-control" type="text" name="SerialNo" value="{{ SerialNo }}" readonly />
-                    </div>
-                    <div class="col-sm-1" style="margin-left: 25px;">
-                        <label for="OrderNo">Order No.</label>
-                    </div>
-                    <div class="col-sm-2">
-                        <input class="form-control" type="number" name="OrderNo" value="{{ OrderNo }}" required placeholder="Order No." min="1" required />
-                    </div>
-                    <div class="col-1" style="margin-left: 25px;">
-                        <label class="col-sm-2 col-form-label">Date</label>
-                    </div>
-                    <div class="col-sm-2">
-                        <input type="date" name="Date" id="dateoforder" value="{{ Date }}" class="form-control" required />
-                    </div>
-                </div>
+            
                 <div class="dwrap">
                     <div>
                         <div class="row_wrap">

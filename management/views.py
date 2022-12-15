@@ -109,7 +109,34 @@ def stock_view(request):
 
 
 def consumption_record(request):
-    return render(request, "consumption_record.html")
+    Qualities = Quality.objects.all()
+    Colours = Colour.objects.all()
+    Customers = Customer.objects.all()
+    Orders = OrderList.objects.all()
+    Others = OtherConsumption.objects.all()
+    if request.method=="POST":
+        if request.POST.get("search"):
+            quality = request.POST.get("quality")
+            colour = request.POST.get("colour")
+            radio = request.POST.get("radio")
+            customer = request.POST.get("customer")
+            if radio:
+                try:
+                    stocks=OtherConsumption.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour)) 
+
+                except :
+                    stocks = OtherConsumption()
+                    stocks.Quality = Quality.objects.get(Quality=quality)
+                    stocks.Colour=Colour.objects.get(Colour=colour)
+                    
+            else:
+                try:
+                    stocks = OrderList.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour), Customer=Customer.objects.get(CustomerName=customer))
+                except:
+                    
+
+
+    return render(request, "consumption_record.html", context={"Orders":Orders,"Colours": Colours,"Qualities": Qualities,"Customers":Customers, "Others":Others, "Stocks":stocks})
 
 
 def stock_movement(request):

@@ -65,6 +65,11 @@ class FactoryStock(models.Model):
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveIntegerField()
 
+class OtherConsumption(models.Model):
+    Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+    Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
+    Quantity = models.PositiveIntegerField()
+
 """create table quality(qual varchar(256) primary key);
 create table colour(col varchar(256) primary key);
 drop table customerName;
