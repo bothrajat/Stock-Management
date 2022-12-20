@@ -68,6 +68,7 @@
                     <thead>
                         <tr>
                             <th scope="col"></th>
+                            <th scope="col">Factory</th>
                             <th scope="col">Quality</th>
                             <th scope="col">Colour</th>
                             <th scope="col">Balance Quantity</th>
@@ -77,6 +78,7 @@
                         {% for Stock in FactStock %}
                         <tr>
                             <td></td>
+                            <td>{{Stock.Factory.Name}}</td>
                             <td>{{Stock.Quality.Quality}}</td>
                             <td>{{Stock.Colour.Colour}}</td>
                             <td>{{Stock.Quantity}}</td>
@@ -93,6 +95,7 @@
                     <thead>
                         <tr>
                             <th scope="col"></th>
+                            <th scope="col">Office</th>
                             <th scope="col">Quality</th>
                             <th scope="col">Colour</th>
                             <th scope="col">Balance Quantity</th>
@@ -102,6 +105,7 @@
                         {% for Stock in OffStock %}
                         <tr>
                             <td></td>
+                            <td>{{Stock.Office.Name}}</td>
                             <td>{{Stock.Quality.Quality}}</td>
                             <td>{{Stock.Colour.Colour}}</td>
                             <td>{{Stock.Quantity}}</td>
