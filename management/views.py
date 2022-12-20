@@ -28,7 +28,7 @@ def collect(request):
         ID = 1
     return {
         "SerialNo": int(request.POST.get("SerialNo")),
-        "OrderNo": int(request.POST.get("OrderNo")),
+        "OrderNo":request.POST.get("OrderNo"),
         "Date": request.POST.get("Date"),
         "CustomerName": request.POST.get("CustomerName"),
         "Quality": request.POST.get("Quality"),
@@ -120,23 +120,21 @@ def consumption_record(request):
             colour = request.POST.get("colour")
             radio = request.POST.get("radio")
             customer = request.POST.get("customer")
-            if radio:
-                try:
-                    stocks=OtherConsumption.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour)) 
+            # if radio:
+            #     try:
+            #         stocks=OtherConsumption.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour)) 
 
-                except :
-                    stocks = OtherConsumption()
-                    stocks.Quality = Quality.objects.get(Quality=quality)
-                    stocks.Colour=Colour.objects.get(Colour=colour)
+            #     except :
+            #         stocks = OtherConsumption()
+            #         stocks.Quality = Quality.objects.get(Quality=quality)
+            #         stocks.Colour=Colour.objects.get(Colour=colour)
                     
-            else:
-                try:
-                    stocks = OrderList.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour), Customer=Customer.objects.get(CustomerName=customer))
-                except:
+            
+                
                     
 
 
-    return render(request, "consumption_record.html", context={"Orders":Orders,"Colours": Colours,"Qualities": Qualities,"Customers":Customers, "Others":Others, "Stocks":stocks})
+    return render(request, "consumption_record.html", context={"Orders":Orders,"Colours": Colours,"Qualities": Qualities,"Customers":Customers, "Others":Others})
 
 
 def stock_movement(request):
@@ -179,6 +177,7 @@ def stock_movement(request):
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
+    Factories = Factory.objects.all()
     if request.method =="POST":
         quality=request.POST.get("Quality")
         colour= request.POST.get("Colour")
@@ -196,4 +195,4 @@ def production_input(request):
            stock.save()
          
     return render (request, "production_record.html", context={"Colours": Colours,
-            "Qualities": Qualities})
+            "Qualities": Qualities, "Factories": Factories})

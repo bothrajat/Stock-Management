@@ -33,6 +33,17 @@
 </nav>
   <form method="POST">
     {% csrf_token %}
+
+    <div class="row_wrap">
+      <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Factory Name</label>
+      <select class="col-3" aria-label="Default select example" required name="Quality">
+        <option value="">Select Factory</option>
+            {% for Factory in Factories %}
+            <option value="{{ Factory.Name }}">{{ Factory.Name }}</option>
+            {% endfor %}
+            
+      </select>
+    </div>
     <div class="row_wrap">
       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Quality</label>
       <select class="col-3" aria-label="Default select example" required name="Quality">
