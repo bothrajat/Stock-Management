@@ -13,7 +13,7 @@ class Colour(models.Model):
     Colour = models.CharField(max_length=32, primary_key=True)
 
 class Order(models.Model):
-    OrderNo=models.IntegerField(unique=True)
+    OrderNo=models.CharField(unique=True, max_length=256)
 
 class OrderList(models.Model):
     Customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)

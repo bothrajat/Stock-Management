@@ -28,7 +28,7 @@ def collect(request):
         ID = 1
     return {
         "SerialNo": int(request.POST.get("SerialNo")),
-        "OrderNo": int(request.POST.get("OrderNo")),
+        "OrderNo":request.POST.get("OrderNo"),
         "Date": request.POST.get("Date"),
         "CustomerName": request.POST.get("CustomerName"),
         "Quality": request.POST.get("Quality"),
