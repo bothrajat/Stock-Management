@@ -28,7 +28,7 @@ def collect(request):
         ID = 1
     return {
         "SerialNo": int(request.POST.get("SerialNo")),
-        "OrderNo":request.POST.get("OrderNo"),
+        "OrderNo": request.POST.get("OrderNo"),
         "Date": request.POST.get("Date"),
         "CustomerName": request.POST.get("CustomerName"),
         "Quality": request.POST.get("Quality"),
@@ -214,12 +214,20 @@ def stock_movement(request):
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
+    Factories = Factory.objects.all()
+    context = {
+        "Colours": Colours,
+        "Qualities": Qualities,
+        "Factories": Factories,
+    }
     if request.method == "POST":
         quality = request.POST.get("Quality")
         colour = request.POST.get("Colour")
+        factory=Factory.objects.get(Name=request.POST.get("Factory"))
         Quantity = int(request.POST.get("Quantity", 0))
         try:
             stocks = FactoryStock.objects.get(
+                Factory=factory,
                 Quality=Quality.objects.get(Quality=quality),
                 Colour=Colour.objects.get(Colour=colour),
             )
@@ -228,6 +236,7 @@ def production_input(request):
 
         except:
             stock = FactoryStock()
+            stock.Factory=factory
             stock.Quality = Quality.objects.get(Quality=quality)
             stock.Colour = Colour.objects.get(Colour=colour)
             stock.Quantity = Quantity
@@ -236,5 +245,5 @@ def production_input(request):
     return render(
         request,
         "production_record.html",
-        context={"Colours": Colours, "Qualities": Qualities},
+        context={**context},
     )
