@@ -64,7 +64,10 @@ def order_booking(request):
             del data["OrderList"][data["ID"]]
 
         elif request.POST.get("submit"):
-            order = Order.objects.create(OrderNo=data["OrderNo"])
+            order = Order.objects.get(OrderNo=data["OrderNo"])
+            if not order:
+                order = Order.objects.create(OrderNo=data["OrderNo"])
+            # print(data["CustomerName"])
             customer = Customer.objects.get(CustomerName=data["CustomerName"])
             Date = data["Date"]
             for key, value in data["OrderList"].items():

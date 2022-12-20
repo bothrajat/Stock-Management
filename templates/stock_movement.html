@@ -32,7 +32,7 @@
                 <div class="row_wrap" style="margin-top: 15px; margin-bottom: 15px;">
                     <div class="putonleft">
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 50px;">From</label>
-                        <select id="options_from" aria-label="Default select example" required style="margin-right: 50px;" name="fromtype">
+                        <select class="form-select" id="options_from" aria-label="Default select example" required style="margin-right: 50px;" name="fromtype">
                             <option value="" selected disabled>
                                 Select Type
                             </option>
@@ -50,7 +50,7 @@
                             <label for="from">Name:</label>
                         </div>
                         <div class="col-4">
-                            <select class="col-8" id="choices_from" aria-label="Default select example" required style="margin-right: 50px;" name="fromName">
+                            <select class="form-select" id="choices_from" aria-label="Default select example" required style="margin-right: 50px;" name="fromName">
                                 <option value="" selected disabled>Select Name</option>
                             </select>
                         </div>
@@ -59,7 +59,7 @@
                 <div class="row_wrap" style="margin-top: 15px; margin-bottom: 15px;">
                     <div class="putonleft">
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 70px;">To</label>
-                        <select class="col-3" id="options_to" aria-label="Default select example" required style="margin-left: 70px;" name="totype">
+                        <select class="form-select" id="options_to" aria-label="Default select example" required style="margin-left: 70px;" name="totype">
                             <option value="" selected disabled>Select Type</option>
                             <option value="Dyeing">
                                 Dyeing
@@ -75,7 +75,7 @@
                             <label for="from">Name:</label>
                         </div>
                         <div class="col-4">
-                            <select class="col-8" id="choices_to" aria-label="Default select example" required style="margin-right: 50px;" name="toName">
+                            <select class="form-select" id="choices_to" aria-label="Default select example" required style="margin-right: 50px;" name="toName">
                                 <option value="" selected disabled>Select Name</option>
                             </select>
                         </div>
@@ -87,8 +87,8 @@
                     <div class="row_wrap">
                         <div class="putonleft">
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 75px;">Quality</label>
-                            <select class="col-7" aria-label="Default select example" required style="margin-left: 68px;" name="Quality">
-                                <option value="">Select Quality</option>
+                            <select class="form-select" aria-label="Default select example" required style="margin-left: 68px;" name="Quality">
+                                <option value="" selected disabled>Select Quality</option>
                                 {% for Quality in Qualities %}
                                 <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
                                 {% endfor %}
@@ -99,8 +99,8 @@
                     <div class="row_wrap">
                         <div class="putonleft">
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 76px;">Colour</label>
-                            <select class="col-7" aria-label="Default select example" required style="margin-left: 69px;" name="Colour">
-                                <option value="">Select Colour</option>
+                            <select class="form-select" aria-label="Default select example" required style="margin-left: 69px;" name="Colour">
+                                <option value="" selected disabled>Select Colour</option>
                                 {% for Colour in Colours %}
                                 <option value="{{ Colour.Colour }}">{{ Colour.Colour }}</option>
                                 {% endfor %}
@@ -188,6 +188,7 @@
 
             // Empty the target field
             $("#choices_from").empty();
+            $("#choices_from").append("<option value='' selected disabled>Select Name</option>");
 
             // For each chocie in the selected option
             for (i = 0; i < lookup[selectValue].length; i++) {
