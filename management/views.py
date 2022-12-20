@@ -62,6 +62,9 @@ def order_booking(request):
 
         elif request.POST.get("remove"):
             del data["OrderList"][data["ID"]]
+            if not data["OrderList"]:
+                data["CustomerName"]=""
+                data["OrderNo"]=""
 
         elif request.POST.get("submit"):
             order = Order.objects.get(OrderNo=data["OrderNo"])
