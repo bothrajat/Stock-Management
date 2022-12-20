@@ -77,7 +77,7 @@ def order_booking(request):
                 OrderList_obj.BalanceQuantity = value["Quantity"]
                 OrderList_obj.Date = Date
                 OrderList_obj.save()
-            return redirect('order-booking')
+            return redirect("order-booking")
         return render(
             request,
             "order_booking.html",
@@ -101,57 +101,92 @@ def stock_view(request):
     FactStock = FactoryStock.objects.all()
     OffStock = OfficeStock.objects.all()
     DyeStock = DyeingStock.objects.all()
-    Orders = OrderList.objects.all()
+    Orders = OrderList.objects.all().order_by("Order")
     FinStock = FinishingStock.objects.all()
 
-
-    return render(request, "stock_view.html", context={"FactStock":FactStock, "OffStock":OffStock, "DyeStock":DyeStock, "Orders":Orders, "FinStock":FinStock})
+    return render(
+        request,
+        "stock_view.html",
+        context={
+            "FactStock": FactStock,
+            "OffStock": OffStock,
+            "DyeStock": DyeStock,
+            "Orders": Orders,
+            "FinStock": FinStock,
+        },
+    )
 
 
 def consumption_record(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
     Customers = Customer.objects.all()
-    Orders = OrderList.objects.all()
-    Others = OtherConsumption.objects.all()
-    if request.method=="POST":
+    context = {"Customers": Customers, "Colours": Colours, "Qualities": Qualities}
+    if request.method == "POST":
         if request.POST.get("search"):
             quality = request.POST.get("quality")
             colour = request.POST.get("colour")
-            radio = request.POST.get("radio")
+            # radio = request.POST.get("radio")
+            radio = 0
             customer = request.POST.get("customer")
             if radio:
                 try:
-                    stocks=OtherConsumption.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour)) 
+                    stocks = OtherConsumption.objects.get(
+                        Quality=Quality.objects.get(Quality=quality),
+                        Colour=Colour.objects.get(Colour=colour),
+                    )
 
-                except :
+                except:
                     stocks = OtherConsumption()
                     stocks.Quality = Quality.objects.get(Quality=quality)
-                    stocks.Colour=Colour.objects.get(Colour=colour)
-                    
+                    stocks.Colour = Colour.objects.get(Colour=colour)
             else:
-                try:
-                    stocks = OrderList.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour), Customer=Customer.objects.get(CustomerName=customer))
-                except:
-                    
-
-
-    return render(request, "consumption_record.html", context={"Orders":Orders,"Colours": Colours,"Qualities": Qualities,"Customers":Customers, "Others":Others, "Stocks":stocks})
+                stocks = OrderList.objects.filter(
+                    Customer=Customer.objects.get(CustomerName=customer),
+                    Quality=Quality.objects.get(Quality=quality),
+                    Colour=Colour.objects.get(Colour=colour),
+                )
+                return render(
+                    request,
+                    "consumption_record.html",
+                    context={
+                        "Orders": Orders,
+                        "Colours": Colours,
+                        "Qualities": Qualities,
+                        "Customers": Customers,
+                        "Others": Others,
+                        "Stocks": stocks,
+                    },
+                )
+    return render(
+        request,
+        "consumption_record.html",
+        context={**context},
+    )
 
 
 def stock_movement(request):
-     
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
     Dyers = Dyer.objects.all()
     Finishers = Finisher.objects.all()
-    if request.method=="POST":
-        data={}
+    Offices = Office.objects.all()
+    Factories = Factory.objects.all()
+    context = {
+        "Colours": Colours,
+        "Qualities": Qualities,
+        "Dyers": json.dumps([dyer.Name for dyer in Dyers]),
+        "Finishers": json.dumps([finisher.Name for finisher in Finishers]),
+        "Factories": json.dumps([factory.Name for factory in Factories]),
+        "Offices": json.dumps([office.Name for office in Offices]),
+    }
+    if request.method == "POST":
+        data = {}
         data["StockList"] = request.POST.get("stocklist")
         data["ID"] = request.POST.get("ID")
-        data["quality"]=request.POST.get("Quality")
-        data["colour"]= request.POST.get("Colour")
-        data["Quantity"]= int(request.POST.get("Quantity", 0))
+        data["quality"] = request.POST.get("Quality")
+        data["colour"] = request.POST.get("Colour")
+        data["Quantity"] = int(request.POST.get("Quantity", 0))
         data["FromType"] = request.POST.get("fromtype")
         data["FromName"] = request.POST.get("fromName")
         data["ToType"] = request.POST.get("totype")
@@ -173,27 +208,33 @@ def stock_movement(request):
                 "Quantity": data["Quantity"],
             }
 
-    return render(request, "stock_movement.html")
+    return render(request, "stock_movement.html", context=context)
 
 
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    if request.method =="POST":
-        quality=request.POST.get("Quality")
-        colour= request.POST.get("Colour")
-        Quantity= int(request.POST.get("Quantity", 0))
+    if request.method == "POST":
+        quality = request.POST.get("Quality")
+        colour = request.POST.get("Colour")
+        Quantity = int(request.POST.get("Quantity", 0))
         try:
-            stocks=FactoryStock.objects.get(Quality=Quality.objects.get(Quality=quality), Colour=Colour.objects.get(Colour=colour)) 
-            stocks.Quantity+=Quantity
+            stocks = FactoryStock.objects.get(
+                Quality=Quality.objects.get(Quality=quality),
+                Colour=Colour.objects.get(Colour=colour),
+            )
+            stocks.Quantity += Quantity
             stocks.save()
 
-        except :
-           stock = FactoryStock()
-           stock.Quality = Quality.objects.get(Quality=quality)
-           stock.Colour=Colour.objects.get(Colour=colour)
-           stock.Quantity=Quantity
-           stock.save()
-         
-    return render (request, "production_record.html", context={"Colours": Colours,
-            "Qualities": Qualities})
+        except:
+            stock = FactoryStock()
+            stock.Quality = Quality.objects.get(Quality=quality)
+            stock.Colour = Colour.objects.get(Colour=colour)
+            stock.Quantity = Quantity
+            stock.save()
+
+    return render(
+        request,
+        "production_record.html",
+        context={"Colours": Colours, "Qualities": Qualities},
+    )
