@@ -85,8 +85,8 @@
             </table>
         </div>
         <div class="row_wrap">
-            <label class="my-1 mr-2" for="Quality" style="margin-right: 80px;">Quality</label>
-                                <select class="col-2" name="Quality" id="Quality" aria-label="Default select example" style="margin-left: 80px;">
+            <label class="my-1 mr-2" for="Quality" >Quality</label>
+                                <select class="form-select" name="Quality" id="Quality" aria-label="Default select example" style="margin-right: 80px;">
                                     <option value="">Select Quality.</option>
                                     {% for Quality in Qualities %}
                                     <option value="{{ Quality.Quality }}">
@@ -95,8 +95,8 @@
                                     {% endfor %}
                                 </select>
 
-            <label class="my-1 mr-2" for="Colour" style="margin-right: 80px;" >Colour</label>
-                                <select class="col-2" name="Colour" id="Colour" aria-label="Default select example" style="margin-left: 80px;">
+            <label class="my-1 mr-2" for="Colour" >Colour</label>
+                                <select class="form-select" name="Colour" id="Colour" aria-label="Default select example" style="margin-right: 80px;">
                                     <option value="">Select Colour.</option>
                                     {% for Colour in Colours %}
                                     <option value="{{ Colour.Colour }}">
