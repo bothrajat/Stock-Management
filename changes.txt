@@ -1,0 +1,21 @@
+Order Booking-
+Serial Number ke hisaab se edit
+
+
+Stock View-
+Har table me edit ka option jisme changes datewise dikhne chahiye
+
+taaki track kara easy ho jaaye ki konsi entry galat dali thi jisme change kar sake
+
+Consumption Record-
+Party ka naam daala
+uske saare order ek table me show jiska balance quantity >0
+uske baad ab quality aur colour pe bhi sleect aur sorting.
+yaani order ki table show karni padegi.
+phir uske hisaab se rows aani chahiye.
+jaise hi kuch select ho jaaye uspe hi table me changes show ho jaane chahiye
+search button nahi chahiye
+
+Stock Movement-
+Challan Number daalna hai
+Har jagah challan se respective changes ikhne chahiye ki is challan me itna item baaki hai itna item aa chuka hai.
