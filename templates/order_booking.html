@@ -208,9 +208,9 @@
             }
             
             function Submit(){
-                document.getElementById("CustomerName-selectized").removeAttribute("required");
-                document.getElementById("Quality-selectized").removeAttribute("required");
-                document.getElementById("Colour-selectized").removeAttribute("required");
+                {% comment %} document.getElementById("CustomerName").removeAttribute("required"); {% endcomment %}
+                document.getElementById("Quality").removeAttribute("required");
+                document.getElementById("Colour").removeAttribute("required");
                 document.getElementById("Quantity").removeAttribute("required");
             }
 
