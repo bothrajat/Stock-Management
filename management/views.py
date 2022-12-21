@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import render, redirect
+from django.db import transaction
 from management.models import *
 import json, ast
 
@@ -55,7 +56,6 @@ def order_booking(request):
 
         if request.POST.get("save"):
             data["OrderList"][data["ID"]] = {
-                "Quality": data["Quality"],
                 "Colour": data["Colour"],
                 "Quantity": data["Quantity"],
             }
@@ -67,23 +67,28 @@ def order_booking(request):
 
         elif request.POST.get("submit"):
             try:
-                order = Order.objects.get(OrderNo=data["OrderNo"])
+                with transaction.atomic():
+                    try:
+                        order = Order.objects.get(OrderNo=data["OrderNo"])
+                    except:
+                        order = Order.objects.create(OrderNo=data["OrderNo"])
+                    # print(data["CustomerName"])
+                    customer = Customer.objects.get(CustomerName=data["CustomerName"])
+                    quality = Quality.objects.get(Quality=value["Quality"])
+                    serialNo = SerialNo.objects.create(Order=order, Customer=customer,Quality=quality)
+                    Date = data["Date"]
+                    for key, value in data["OrderList"].items():
+                        OrderList_obj = OrderList()
+                        OrderList_obj.SerialNo=serialNo
+                        OrderList_obj.Colour = Colour.objects.get(Colour=value["Colour"])
+                        OrderList_obj.OrderedQuantity = value["Quantity"]
+                        OrderList_obj.BalanceQuantity = value["Quantity"]
+                        OrderList_obj.Date = Date
+                        OrderList_obj.save()
+                    return redirect("order-booking")
             except:
-                order = Order.objects.create(OrderNo=data["OrderNo"])
-            # print(data["CustomerName"])
-            customer = Customer.objects.get(CustomerName=data["CustomerName"])
-            serialNo = SerialNo.objects.create(Order=order, Customer=customer)
-            Date = data["Date"]
-            for key, value in data["OrderList"].items():
-                OrderList_obj = OrderList()
-                OrderList_obj.SerialNo=serialNo
-                OrderList_obj.Colour = Colour.objects.get(Colour=value["Colour"])
-                OrderList_obj.Quality = Quality.objects.get(Quality=value["Quality"])
-                OrderList_obj.OrderedQuantity = value["Quantity"]
-                OrderList_obj.BalanceQuantity = value["Quantity"]
-                OrderList_obj.Date = Date
-                OrderList_obj.save()
-            return redirect("order-booking")
+                print("Error OCCURREDD")
+
         return render(
             request,
             "order_booking.html",
