@@ -43,7 +43,7 @@
 
                 <div class="col-sm-2">
                     <input class="form-control" type="text" name="OrderNo" value="{{OrderNo}}" required
-                        placeholder="Order No." min="1" required>
+                        placeholder="Order No." min="1" style="text-transform:uppercase;" required>
                 </div>
 
                 <div class="col-1" style="margin-left: 25px">
@@ -66,9 +66,7 @@
                                 </label>
                                 <div class="col-12">
                                     <select class="col-11" name="CustomerName" value="{{ CustomerName }}" id="CustomerName" aria-label="Default select example" required style="margin-left: 80px;">
-                                        <option value="">
-                                            Select Customer.
-                                        </option>
+                                        <option value="">Select Customer.</option>
                                         {% for Customer in Customers %}
                                         <option value="{{ Customer.CustomerName }}">
                                             {{ Customer.CustomerName }}
@@ -83,9 +81,7 @@
                             <div class="putonleft">
                                 <label class="my-1 mr-2" for="Quality" style="margin-right: 80px;">Quality</label>
                                 <select class="col-8" name="Quality" id="Quality" aria-label="Default select example" required style="margin-left: 80px;">
-                                    <option value="">
-                                        Select Quality.
-                                    </option>
+                                    <option value="">Select Quality.</option>
                                     {% for Quality in Qualities %}
                                     <option value="{{ Quality.Quality }}">
                                         {{ Quality.Quality }}
@@ -99,9 +95,7 @@
                             <div class="putonleft">
                                 <label class="my-1 mr-2" for="Colour" style="margin-right: 80px;">Colour</label>
                                 <select class="col-8" name="Colour" id="Colour" aria-label="Default select example" required style="margin-left: 80px;">
-                                    <option value="">
-                                        Select Colour.
-                                    </option>
+                                    <option value="">Select Colour.</option>
                                     {% for Colour in Colours %}
                                     <option value="{{ Colour.Colour }}">
                                         {{ Colour.Colour }}
@@ -169,8 +163,10 @@
                         <input type="reset" value="CLEAR" class="btn btn-outline-secondary" />
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+
+
         <p id="demo"></p>
         <script>
             let dte = new Date();

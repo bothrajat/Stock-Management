@@ -124,8 +124,10 @@ def consumption_record(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
     Customers = Customer.objects.all()
+    Orders = OrderList.objects.all()
+    Others = OtherConsumption.objects.all()
     context = {"Customers": Customers, "Colours": Colours, "Qualities": Qualities}
-    if request.method == "POST":
+    if request.method == "POST" and request.POST.get("search"):
         if request.POST.get("search"):
             quality = request.POST.get("quality")
             colour = request.POST.get("colour")
@@ -144,12 +146,14 @@ def consumption_record(request):
                     stocks.Quality = Quality.objects.get(Quality=quality)
                     stocks.Colour = Colour.objects.get(Colour=colour)
             else:
-                stocks = OrderList.objects.filter(
-                    Customer=Customer.objects.get(CustomerName=customer),
-                    Quality=Quality.objects.get(Quality=quality),
-                    Colour=Colour.objects.get(Colour=colour),
-                )
-                return render(
+                try:
+                    stocks = OrderList.objects.filter(
+                            Customer=Customer.objects.get(CustomerName=customer),
+                        )
+                except:
+                    print("No order")
+
+            return render(
                     request,
                     "consumption_record.html",
                     context={
