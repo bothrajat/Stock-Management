@@ -209,6 +209,7 @@
             
             function Submit(){
                 {% comment %} document.getElementById("CustomerName").removeAttribute("required"); {% endcomment %}
+                document.querySelector('input[type="radio"]').removeAttribute("required");
                 document.getElementById("Quality").removeAttribute("required");
                 document.getElementById("Colour").removeAttribute("required");
                 document.getElementById("Quantity").removeAttribute("required");
