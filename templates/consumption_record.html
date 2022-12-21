@@ -36,7 +36,7 @@
         {% csrf_token %}
         <div class="row_wrap">
             <label for="customername" class="col-sm-1 col-form-label">Customer Name</label>
-            <select id="select-state" class="col-3" name="customer">
+            <select id="select-state" class="form-select" name="customer">
                 <option value="">Select Customer Name..</option>
                 {% for Customer in Customers %}
                 <option value="{{ Customer.CustomerName }}">{{ Customer.CustomerName }}</option>
@@ -129,11 +129,11 @@
     </form>
 </body>
 <script>
-    $(document).ready(function () {
+    {% comment %} $(document).ready(function () {
       $('select').selectize({
           sortField: 'text'
       });
-  });
+  }); {% endcomment %}
 
   document.getElementById("switch").defaultChecked=false
 

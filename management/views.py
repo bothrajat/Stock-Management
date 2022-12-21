@@ -44,6 +44,7 @@ def order_booking(request):
     Colours = Colour.objects.all()
     Customers = Customer.objects.all()
     SerialNo = Order.objects.count() + 1
+    OrderList={}
     context = {
         "SerialNo": SerialNo,
         "Colours": Colours,
@@ -62,6 +63,8 @@ def order_booking(request):
 
         elif request.POST.get("remove"):
             del data["OrderList"][data["ID"]]
+            if not data["OrderList"]:
+                return redirect('order-booking')
 
         elif request.POST.get("submit"):
             order = Order.objects.get(OrderNo=data["OrderNo"])
@@ -96,6 +99,7 @@ def order_booking(request):
         "order_booking.html",
         context={
             **context,
+            "OrderList":OrderList,
         },
     )
 
