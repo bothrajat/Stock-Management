@@ -27,7 +27,6 @@ def collect(request):
         OrderList = {}
         ID = 1
     return {
-        "SerialNo": int(request.POST.get("SerialNo")),
         "OrderNo": request.POST.get("OrderNo"),
         "Date": request.POST.get("Date"),
         "CustomerName": request.POST.get("CustomerName"),
@@ -43,10 +42,10 @@ def order_booking(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
     Customers = Customer.objects.all()
-    SerialNo = Order.objects.count() + 1
-    OrderList={}
+    serialNo = SerialNo.objects.count() + 1
+    Orderlist = {}
     context = {
-        "SerialNo": SerialNo,
+        "SerialNo": serialNo,
         "Colours": Colours,
         "Qualities": Qualities,
         "Customers": Customers,
@@ -64,21 +63,22 @@ def order_booking(request):
         elif request.POST.get("remove"):
             del data["OrderList"][data["ID"]]
             if not data["OrderList"]:
-                return redirect('order-booking')
+                return redirect("order-booking")
 
         elif request.POST.get("submit"):
-            order = Order.objects.get(OrderNo=data["OrderNo"])
-            if not order:
+            try:
+                order = Order.objects.get(OrderNo=data["OrderNo"])
+            except:
                 order = Order.objects.create(OrderNo=data["OrderNo"])
             # print(data["CustomerName"])
             customer = Customer.objects.get(CustomerName=data["CustomerName"])
+            serialNo = SerialNo.objects.create(Order=order, Customer=customer)
             Date = data["Date"]
             for key, value in data["OrderList"].items():
                 OrderList_obj = OrderList()
-                OrderList_obj.Customer = customer
+                OrderList_obj.SerialNo=serialNo
                 OrderList_obj.Colour = Colour.objects.get(Colour=value["Colour"])
                 OrderList_obj.Quality = Quality.objects.get(Quality=value["Quality"])
-                OrderList_obj.Order = order
                 OrderList_obj.OrderedQuantity = value["Quantity"]
                 OrderList_obj.BalanceQuantity = value["Quantity"]
                 OrderList_obj.Date = Date
@@ -89,8 +89,6 @@ def order_booking(request):
             "order_booking.html",
             context={
                 **data,
-                "Colours": Colours,
-                "Qualities": Qualities,
                 **context,
             },
         )
@@ -99,7 +97,7 @@ def order_booking(request):
         "order_booking.html",
         context={
             **context,
-            "OrderList":OrderList,
+            "OrderList": Orderlist,
         },
     )
 
@@ -234,7 +232,7 @@ def production_input(request):
     if request.method == "POST":
         quality = request.POST.get("Quality")
         colour = request.POST.get("Colour")
-        factory=Factory.objects.get(Name=request.POST.get("Factory"))
+        factory = Factory.objects.get(Name=request.POST.get("Factory"))
         Quantity = int(request.POST.get("Quantity", 0))
         try:
             stocks = FactoryStock.objects.get(
@@ -247,7 +245,7 @@ def production_input(request):
 
         except:
             stock = FactoryStock()
-            stock.Factory=factory
+            stock.Factory = factory
             stock.Quality = Quality.objects.get(Quality=quality)
             stock.Colour = Colour.objects.get(Colour=colour)
             stock.Quantity = Quantity
