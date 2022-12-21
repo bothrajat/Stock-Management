@@ -74,7 +74,7 @@ def order_booking(request):
                         order = Order.objects.create(OrderNo=data["OrderNo"])
                     # print(data["CustomerName"])
                     customer = Customer.objects.get(CustomerName=data["CustomerName"])
-                    quality = Quality.objects.get(Quality=value["Quality"])
+                    quality = Quality.objects.get(Quality=data["Quality"])
                     serialNo = SerialNo.objects.create(Order=order, Customer=customer,Quality=quality)
                     Date = data["Date"]
                     for key, value in data["OrderList"].items():
