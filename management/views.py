@@ -44,7 +44,7 @@ def order_booking(request):
     Colours = Colour.objects.all()
     Customers = Customer.objects.all()
     SerialNo = Order.objects.count() + 1
-    OrderList={}
+    Orderlist={}
     context = {
         "SerialNo": SerialNo,
         "Colours": Colours,
@@ -67,8 +67,9 @@ def order_booking(request):
                 return redirect('order-booking')
 
         elif request.POST.get("submit"):
-            order = Order.objects.get(OrderNo=data["OrderNo"])
-            if not order:
+            try:
+                order = Order.objects.get(OrderNo=data["OrderNo"])
+            except:
                 order = Order.objects.create(OrderNo=data["OrderNo"])
             # print(data["CustomerName"])
             customer = Customer.objects.get(CustomerName=data["CustomerName"])
@@ -99,7 +100,7 @@ def order_booking(request):
         "order_booking.html",
         context={
             **context,
-            "OrderList":OrderList,
+            "OrderList":Orderlist,
         },
     )
 
