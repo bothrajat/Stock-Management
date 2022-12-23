@@ -154,12 +154,21 @@ def consumption_record(request):
                     stocks.Colour = Colour.objects.get(Colour=colour)
             else:
                 try:
-                    serials = SerialNo.objects.filter(
-                            Customer=Customer.objects.get(CustomerName=customer),
-                        )
-                    stocks = OrderList.objects.filter(SerialNo = serials)
+                    stocks = {}
+                    for number in SerialNo.objects.filter(Customer = Customer.objects.get(CustomerName = customer)):
+                        for order in OrderList.objects.filter(SerialNo = number):
+                            stocks[order.id] = {
+                                "OrderNo": order.SerialNo.Order.OrderNo,
+                                "CustomerName":order.SerialNo.Customer.CustomerName,
+                                "Quality": order.SerialNo.Quality.Quality,
+                                "Colour": order.Colour.Colour,
+                                "OrderedQuantity" : order.OrderedQuantity,
+                                "BalanceQuantity":order.BalanceQuantity,
+                                "Date": order.Date
+
+                            }
                 except:
-                    print("No order")
+                    stocks = None
 
             return render(
                     request,

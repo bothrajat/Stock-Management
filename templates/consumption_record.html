@@ -7,8 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
-    <script src="node_modules/tablefilter/dist/tablefilter/tablefilter.js"></script>
-
         <link rel="stylesheet" href="{% static 'consumption_movement.css' %}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
@@ -36,7 +34,7 @@
         {% csrf_token %}
         <div class="row_wrap">
             <label for="customername" class="col-sm-1 col-form-label">Customer Name</label>
-            <select id="select-state" class="form-select" name="customer">
+            <select id="select-customer" class="form-select" name="customer">
                 <option value="">Select Customer Name..</option>
                 {% for Customer in Customers %}
                 <option value="{{ Customer.CustomerName }}">{{ Customer.CustomerName }}</option>
@@ -51,9 +49,10 @@
 
         </div>
         <div class="row_wrap">
-            <input type="submit" value="SEARCH" class="btn btn-outline-secondary" name="search">
+            <input type="submit" value="SEARCH" class="btn btn-outline-secondary" name="search" onclick="searchit()">
         </div>
         <div>
+            {% if Stocks %}
             <table class="table table-striped table-dark table-hover table-bordered" id="teb">
                 <thead>
                     <tr>
@@ -68,13 +67,13 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    {% for Stock in Stocks %}
+                    {% for key,Stock in Stocks.items %}
                    <tr>
-                       <td><input type="radio" class="form-check-input" onclick="getID()" value="{{ key }}"></td>
-                       <td>{{Stock.Order.OrderNo}}</td>
-                       <td>{{Stock.Customer.CustomerName}}</td>
-                       <td>{{Stock.Quality.Quality}}</td>
-                       <td>{{Stock.Colour.Colour}}</td>
+                       <td><input type="radio" class="form-check-input" onclick="putval()" value="{{ key }}" name="radio"></td>
+                       <td>{{Stock.OrderNo}}</td>
+                       <td>{{Stock.CustomerName}}</td>
+                       <td>{{Stock.Quality}}</td>
+                       <td>{{Stock.Colour}}</td>
                        <td>{{Stock.OrderedQuantity}}</td>
                        <td>{{Stock.BalanceQuantity}}</td>
                        <td>{{Stock.Date}}</td>
@@ -83,6 +82,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% endif %}
         </div>
         <div class="row_wrap">
             <label class="my-1 mr-2" for="Quality" >Quality</label>
@@ -126,6 +126,7 @@
                 <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit">
             </div>
         </div>
+        <input hidden type="text" value="{{Stocks}}">
     </form>
 </body>
 <script>
@@ -147,6 +148,27 @@
                 });
             });
 
+
+    if("{{Stocks}}"){ 
+        document.getElementById("switch").setAttribute("disabled", "");
+        document.getElementById("select-customer").value = name;
+
+    }
+    var name;
+    var check;
+    function searchit(){
+        document.getElementById("switch").setAttribute("disabled", "");
+        name = document.getElementById("select-customer").value;
+
+        
+    }
+    function putval(){
+        var temp = document.querySelector('input[type="radio"]:checked').value;
+        {% comment %} document.getElementById("balanceqty").value ={{ Stocks[parseInt(temp)]["BalanceQuantity"] }}; {% endcomment %}
+        eval("var OrderList=" + "{{Stocks}}");
+    }
+
+    
 </script>
 
 </html>
