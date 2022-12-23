@@ -164,8 +164,7 @@ def consumption_record(request):
                                 "Colour": order.Colour.Colour,
                                 "OrderedQuantity" : order.OrderedQuantity,
                                 "BalanceQuantity":order.BalanceQuantity,
-                                "Date": order.Date
-
+                                "Date": str(order.Date)
                             }
                 except:
                     stocks = None
