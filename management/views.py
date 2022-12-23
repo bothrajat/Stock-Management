@@ -149,9 +149,10 @@ def consumption_record(request):
                     stocks.Colour = Colour.objects.get(Colour=colour)
             else:
                 try:
-                    stocks = OrderList.objects.filter(
+                    serials = SerialNo.objects.filter(
                             Customer=Customer.objects.get(CustomerName=customer),
                         )
+                    stocks = OrderList.objects.filter(SerialNo = serials)
                 except:
                     print("No order")
 

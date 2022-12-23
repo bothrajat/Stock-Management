@@ -21,7 +21,7 @@ class SerialNo(models.Model):
     Customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     Order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
 
-    class meta:
+    class Meta:
         unique_together = (("Customer", "Order"),)
 
 
