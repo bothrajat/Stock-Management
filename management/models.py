@@ -20,6 +20,7 @@ class Order(models.Model):
 class SerialNo(models.Model):
     Customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
     Order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
+    Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
 
     class Meta:
         unique_together = (("Customer", "Order"),)
@@ -28,7 +29,6 @@ class SerialNo(models.Model):
 class OrderList(models.Model):
     SerialNo = models.ForeignKey(SerialNo, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
-    Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     OrderedQuantity = models.PositiveIntegerField()
     BalanceQuantity = models.PositiveIntegerField()
     Date = models.DateField()
