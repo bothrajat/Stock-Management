@@ -31,7 +31,7 @@
             <div class="row_wrap">
                 <label for="customername" class="col-sm-1 col-form-label">Customer Name</label>
                 <select id="select-customer" class="form-select" name="customer">
-                    <option value="">Select Customer Name..</option>
+                    <option value="" disabled selected>Select Customer Name..</option>
                     {% for Customer in Customers %}
                     <option value="{{ Customer.CustomerName }}">{{ Customer.CustomerName }}</option>
                     {% endfor %}
@@ -40,7 +40,7 @@
             <div class="row_wrap">
                 <div class="form-check form-switch">
                     <input type="checkbox" id="switch" role="switch" class="form-check-input"><label
-                        class="form-check-label" name="radio">OTHERS</label>
+                        class="form-check-label" name="swit">OTHERS</label>
                 </div>
             </div>
             <div class="row_wrap">
@@ -80,8 +80,8 @@
             </div>
             <div class="row_wrap">
                 <label class="my-1 mr-2" for="Quality" >Quality</label>
-                <select class="form-select" name="Quality" id="Quality" aria-label="Default select example" style="margin-right: 80px;">
-                    <option value="">Select Quality.</option>
+                <select class="form-select" name="Quality" id="Quality" aria-label="Default select example" style="margin-right: 80px;" onclick="filtertablebyqual()">
+                    <option value="" disabled selected>Select Quality.</option>
                     {% for Quality in Qualities %}
                     <option value="{{ Quality.Quality }}">
                         {{ Quality.Quality }}
@@ -89,8 +89,8 @@
                     {% endfor %}
                 </select>
                 <label class="my-1 mr-2" for="Colour" >Colour</label>
-                <select class="form-select" name="Colour" id="Colour" aria-label="Default select example" style="margin-right: 80px;">
-                    <option value="">Select Colour.</option>
+                <select class="form-select" name="Colour" id="Colour" aria-label="Default select example" style="margin-right: 80px;" onclick="filtertablebycolour()">
+                    <option value="" disabled selected>Select Colour.</option>
                     {% for Colour in Colours %}
                     <option value="{{ Colour.Colour }}">
                         {{ Colour.Colour }}
@@ -105,16 +105,17 @@
                 </div>
                 <label class="col-sm-1 col-form-label"> Consumed Quantity</label>
                 <div class="col-sm-4">
-                    <input type="number" id="consumedqty" class="form-control" min="1">
+                    <input type="number" id="consumedqty" class="form-control" min="1" name="consumedqty">
                 </div>
             </div>
             <div class="row_wrap">
                 <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary" name="clear"></div>
                 <div class="row_">
-                    <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit">
+                    <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit" onclick="searchit()">
                 </div>
             </div>
             <input hidden type="text" value="{{Stocks}}" id="StockList">
+            <input type="hidden" id="ID" name="ID" value="" />
         </form>
     </body>
     <script>
@@ -138,15 +139,16 @@
         
         
         if("{{Stocks}}"){ 
-            document.getElementById("switch").setAttribute("disabled", "");
             document.getElementById("select-customer").value = name;
-        
+            document.getElementById("switch").value = check;
         }
         var name;
         var check;
         function searchit(){
+            check = document.getElementById("switch").value;
             document.getElementById("switch").setAttribute("disabled", "");
             name = document.getElementById("select-customer").value;
+            
         
             
         }
@@ -156,7 +158,49 @@
             document.getElementById("balanceqty").value=Stocklist[temp]["BalanceQuantity"];
             document.getElementById("consumedqty").value="";
             document.getElementById("consumedqty").setAttribute("max",Stocklist[temp]["BalanceQuantity"]);
+            document.querySelector('input[name="ID"]').value = temp;
+
         }
         
+        {% comment %} function filtertablebyqual(){
+            var table = document.getElementById("teb");
+            var colo = document.getElementById("Colour").value;
+            var qual = document.getElementById("Quality").value;
+            var tr,td, found,i;
+            tr = table. getElementsByTagName("tr");
+            for(i=0;i<tr.length; i++){
+                td = tr[i]document.getElementsByTagName("td");
+                if(td[3].innerHTML.indexOf(qual)>-1){
+                    found = true;
+                }
+                if(found){
+                    tr[i].style.display="";
+                    found = false;
+                }else{
+                    tr[i].style.display="none";
+                }
+            }
+
+        }
+        function filtertablebycolour(){
+            var table = document.getElementById("teb");
+            var colo = document.getElementById("Colour").value;
+            var qual = document.getElementById("Quality").value;
+            var tr, td, found,i;
+            tr = table. getElementsByTagName("tr");
+            for(i=0;i<tr.length; i++){
+                td = tr[i]document.getElementsByTagName("td");
+                if(td[4].innerHTML == colo ){
+                    found = true;
+                }
+                if(found){
+                    tr[i].style.display="";
+                    found = false;
+                }else{
+                    tr[i].style.display="none";
+                }
+            }
+        } {% endcomment %}
+    
     </script>
 </html>
