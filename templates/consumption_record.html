@@ -150,7 +150,6 @@
 
 
     if("{{Stocks}}"){ 
-        document.getElementById("switch").setAttribute("disabled", "");
         document.getElementById("select-customer").value = name;
 
     }
@@ -162,10 +161,11 @@
 
         
     }
+    eval("var Stocks=" + "{{Stocks}}");
     function putval(){
         var temp = document.querySelector('input[type="radio"]:checked').value;
         {% comment %} document.getElementById("balanceqty").value ={{ Stocks[parseInt(temp)]["BalanceQuantity"] }}; {% endcomment %}
-        eval("var OrderList=" + "{{Stocks}}");
+        
     }
 
     
