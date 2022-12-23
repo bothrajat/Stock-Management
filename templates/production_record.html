@@ -36,7 +36,7 @@
 
     <div class="row_wrap">
       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Factory Name</label>
-      <select class="col-3" aria-label="Default select example" required name="Factory">
+      <select class="form-select" aria-label="Default select example" required name="Factory" id ="factname">
         <option value="">Select Factory</option>
             {% for Factory in Factories %}
             <option value="{{ Factory.Name }}">{{ Factory.Name }}</option>
@@ -45,7 +45,7 @@
     </div>
     <div class="row_wrap">
       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Quality</label>
-      <select class="col-3" aria-label="Default select example" required name="Quality">
+      <select class="form-select" aria-label="Default select example" required name="Quality">
         <option value="">Select Quality</option>
             {% for Quality in Qualities %}
             <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
@@ -55,7 +55,7 @@
     </div>
     <div class="row_wrap">
       <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Colour</label>
-      <select class="col-3" aria-label="Default select example" required name="Colour">
+      <select class="form-select" aria-label="Default select example" required name="Colour">
         <option value="">Select Colour</option>
                 {% for Colour in Colours %}
                 <option value="{{ Colour.Colour }}">{{ Colour.Colour}}</option>
@@ -76,18 +76,29 @@
       <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary" ></div>
 
       <div class="row_">
-        <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit">
+        <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit" onclick="sub()">
       </div>
     </div>
   </form>
 </body>
 </body>
 <script>
-  $(document).ready(function () {
+  {% comment %} $(document).ready(function () {
     $('select').selectize({
         sortField: 'text'
     });
-});
+}); {% endcomment %}
+var flag = 0;
+var name;
+  function sub(){
+    flag = 1;
+    name = document.getElementById("factname").value;
+  }
+
+  if(flag){
+    document.getElementById("factname").value = name;
+  }
+
 </script>
 
 </html>

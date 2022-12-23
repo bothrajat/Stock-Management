@@ -134,24 +134,26 @@ def consumption_record(request):
     Orders = OrderList.objects.all()
     Others = OtherConsumption.objects.all()
     context = {"Customers": Customers, "Colours": Colours, "Qualities": Qualities}
-    if request.method == "POST" and request.POST.get("search"):
+    flag = 0
+    if request.method == "POST":
         if request.POST.get("search"):
+            flag = 1
             quality = request.POST.get("quality")
             colour = request.POST.get("colour")
-            # radio = request.POST.get("radio")
+            swit = request.POST.get("swit")
             radio = 0
             customer = request.POST.get("customer")
-            if radio:
+            if swit:
                 try:
-                    stocks = OtherConsumption.objects.get(
-                        Quality=Quality.objects.get(Quality=quality),
-                        Colour=Colour.objects.get(Colour=colour),
-                    )
-
+                    stocks = {}
+                    for number in OtherConsumption.objects.all():
+                        stocks[number.id] = {
+                            "Quality":number.Quality.Quality,
+                            "Colour":number.Colour.Colour,
+                            "Quantity":number.Quantity
+                        }
                 except:
-                    stocks = OtherConsumption()
-                    stocks.Quality = Quality.objects.get(Quality=quality)
-                    stocks.Colour = Colour.objects.get(Colour=colour)
+                    stocks = None
             else:
                 try:
                     stocks = {}
@@ -164,11 +166,45 @@ def consumption_record(request):
                                 "Colour": order.Colour.Colour,
                                 "OrderedQuantity" : order.OrderedQuantity,
                                 "BalanceQuantity":order.BalanceQuantity,
-                                "Date": order.Date
-
+                                "Date": str(order.Date)
                             }
                 except:
                     stocks = None
+           
+            return render(
+                    request,
+                    "consumption_record.html",
+                    context={
+                        "Orders": Orders,
+                        "Colours": Colours,
+                        "Qualities": Qualities,
+                        "Customers": Customers,
+                        "Others": Others,
+                        "Stocks": stocks,
+                    },
+                )
+        
+        if request.POST.get("submit"):
+            customer = request.POST.get("customer")
+            consumedqty = int(request.POST.get("consumedqty"))
+            idee = request.POST.get("ID")
+            ordertook = OrderList.objects.get(id = idee)
+            ordertook.BalanceQuantity -= consumedqty
+            ordertook.save()
+
+            stocks = {}
+            for number in SerialNo.objects.filter(Customer = Customer.objects.get(CustomerName = customer)):
+                for order in OrderList.objects.filter(SerialNo = number):
+                    stocks[order.id] = {
+                                "OrderNo": order.SerialNo.Order.OrderNo,
+                                "CustomerName":order.SerialNo.Customer.CustomerName,
+                                "Quality": order.SerialNo.Quality.Quality,
+                                "Colour": order.Colour.Colour,
+                                "OrderedQuantity" : order.OrderedQuantity,
+                                "BalanceQuantity":order.BalanceQuantity,
+                                "Date": str(order.Date)
+                            }
+
 
             return render(
                     request,
@@ -182,6 +218,12 @@ def consumption_record(request):
                         "Stocks": stocks,
                     },
                 )
+
+            
+
+
+
+            
     return render(
         request,
         "consumption_record.html",
@@ -231,6 +273,15 @@ def stock_movement(request):
                 "Colour": data["Colour"],
                 "Quantity": data["Quantity"],
             }
+
+            return render(
+                    request,
+                    "consumption_record.html",
+                    context={
+                        **context,
+                        "StockList": StockList
+                    }
+                )
 
     return render(request, "stock_movement.html", context=context)
 
