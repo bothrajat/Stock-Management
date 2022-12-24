@@ -140,23 +140,25 @@ def consumption_record(request):
             flag = 1
             quality = request.POST.get("quality")
             colour = request.POST.get("colour")
-            swit = request.POST.get("swit")
-            radio = 0
+            swit = int(request.POST.get("swit"))
             customer = request.POST.get("customer")
+            otherscons = {}
+            stocks = {}
+            print(swit)
             if swit:
                 try:
-                    stocks = {}
+                    print("I am in try")
                     for number in OtherConsumption.objects.all():
-                        stocks[number.id] = {
+                        otherscons[number.id] = {
                             "Quality":number.Quality.Quality,
                             "Colour":number.Colour.Colour,
                             "Quantity":number.Quantity
                         }
                 except:
-                    stocks = None
+                    otherscons = None
             else:
                 try:
-                    stocks = {}
+                    
                     for number in SerialNo.objects.filter(Customer = Customer.objects.get(CustomerName = customer)):
                         for order in OrderList.objects.filter(SerialNo = number):
                             stocks[order.id] = {
@@ -181,21 +183,30 @@ def consumption_record(request):
                         "Customers": Customers,
                         "Others": Others,
                         "Stocks": stocks,
+                        "Othercons":otherscons
                     },
                 )
         
         if request.POST.get("submit"):
-            customer = request.POST.get("customer")
+           
+            idee = (request.POST.get("ID"))
+            if idee:
+                idee = int(idee)
+            else:
+                idee = 0
             consumedqty = int(request.POST.get("consumedqty"))
-            idee = request.POST.get("ID")
-            ordertook = OrderList.objects.get(id = idee)
-            ordertook.BalanceQuantity -= consumedqty
-            ordertook.save()
-
+            otherscons = {}
+            swit = int(request.POST.get("swit"))
             stocks = {}
-            for number in SerialNo.objects.filter(Customer = Customer.objects.get(CustomerName = customer)):
-                for order in OrderList.objects.filter(SerialNo = number):
-                    stocks[order.id] = {
+            if not swit:
+                customer = request.POST.get("customer")
+                
+                ordertook = OrderList.objects.get(id = idee)
+                ordertook.BalanceQuantity -= consumedqty
+                ordertook.save()
+                for number in SerialNo.objects.filter(Customer = Customer.objects.get(CustomerName = customer)):
+                    for order in OrderList.objects.filter(SerialNo = number):
+                        stocks[order.id] = {
                                 "OrderNo": order.SerialNo.Order.OrderNo,
                                 "CustomerName":order.SerialNo.Customer.CustomerName,
                                 "Quality": order.SerialNo.Quality.Quality,
@@ -205,7 +216,27 @@ def consumption_record(request):
                                 "Date": str(order.Date)
                             }
 
+            else:
+                
+                if idee <= 0:
+                    quality = request.POST.get("Quality")
+                    colour =request.POST.get("Colour")
+                    cons = OtherConsumption()
+                    cons.Quality = Quality.objects.get(Quality = quality)
+                    cons.Colour = Colour.objects.get(Colour = colour)
+                    cons.Quantity = consumedqty
+                    cons.save()
+                else:
+                    cons = OtherConsumption.objects.get(id = idee)
+                    cons.Quantity += consumedqty
+                    cons.save()
 
+                for number in OtherConsumption.objects.all():
+                    otherscons[number.id] = {
+                            "Quality":number.Quality.Quality,
+                            "Colour":number.Colour.Colour,
+                            "Quantity":number.Quantity
+                        }
             return render(
                     request,
                     "consumption_record.html",
@@ -216,6 +247,7 @@ def consumption_record(request):
                         "Customers": Customers,
                         "Others": Others,
                         "Stocks": stocks,
+                        "Othercons":otherscons
                     },
                 )
 
