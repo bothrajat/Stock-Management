@@ -148,9 +148,6 @@
               sortField: 'text'
           });
         }); {% endcomment %}
-        
-        document.getElementById("switch").defaultChecked=false
-        
         $(document).ready(function() {
                     $("#Colour").on("keyup", function() {
                         var value = $(this).val();
@@ -159,22 +156,19 @@
                             .indexOf(value) > -1)
                         });
                     });
-        });
-                
-        var name,check;
-        if("{{Stocks}}"){ 
+        }); 
+        var name;
+        if(document.getElementById("StockList").value && document.getElementById("StockList").value!="{}"){ 
             document.getElementById("select-customer").value = name;
             document.getElementById("switc").checked = false;
         }
-        if("{{Othercons}}"){ 
+        else if(document.getElementById("OtherCon").value && document.getElementById("OtherCon").value!="{}"){
             document.getElementById("select-customer").value = "";
             document.getElementById("switc").checked = true;
         } 
 
-        document.getElementById("switc").checked = check;
         function searchit(){
-            check = document.getElementById("switc").checked;
-            document.getElementById("switch").setAttribute("disabled", "");
+            {% comment %} document.getElementById("switch").setAttribute("disabled", ""); {% endcomment %}
             name = document.getElementById("select-customer").value;
             if(document.getElementById("switc").checked){
                 document.getElementById("inphid").value = 1;

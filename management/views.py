@@ -144,10 +144,10 @@ def consumption_record(request):
             customer = request.POST.get("customer")
             otherscons = {}
             stocks = {}
-            print(swit)
+            # print(swit)
             if swit:
                 try:
-                    print("I am in try")
+                    # print("I am in try")
                     for number in OtherConsumption.objects.all():
                         otherscons[number.id] = {
                             "Quality":number.Quality.Quality,
