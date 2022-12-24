@@ -135,22 +135,17 @@
                             .indexOf(value) > -1)
                         });
                     });
-                });
-        
-        
+        });
+                
+        var name,check;
         if("{{Stocks}}"){ 
             document.getElementById("select-customer").value = name;
             document.getElementById("switch").value = check;
         }
-        var name;
-        var check;
         function searchit(){
             check = document.getElementById("switch").value;
             document.getElementById("switch").setAttribute("disabled", "");
             name = document.getElementById("select-customer").value;
-            
-        
-            
         }
         function putval(){
             var temp = parseInt(document.querySelector('input[type="radio"]:checked').value);
@@ -159,18 +154,17 @@
             document.getElementById("consumedqty").value="";
             document.getElementById("consumedqty").setAttribute("max",Stocklist[temp]["BalanceQuantity"]);
             document.querySelector('input[name="ID"]').value = temp;
-
         }
         
-        {% comment %} function filtertablebyqual(){
+        
+        function filtertablebyqual(){
             var table = document.getElementById("teb");
-            var colo = document.getElementById("Colour").value;
             var qual = document.getElementById("Quality").value;
-            var tr,td, found,i;
-            tr = table. getElementsByTagName("tr");
-            for(i=0;i<tr.length; i++){
-                td = tr[i]document.getElementsByTagName("td");
-                if(td[3].innerHTML.indexOf(qual)>-1){
+            var tr,td,found,i;
+            tr = table.getElementsByTagName("tr");
+            for(i=1;i<tr.length; i++){
+                td = tr[i].getElementsByTagName("td");
+                if(td[3].innerHTML == qual){
                     found = true;
                 }
                 if(found){
@@ -180,16 +174,15 @@
                     tr[i].style.display="none";
                 }
             }
-
         }
+
         function filtertablebycolour(){
             var table = document.getElementById("teb");
             var colo = document.getElementById("Colour").value;
-            var qual = document.getElementById("Quality").value;
             var tr, td, found,i;
-            tr = table. getElementsByTagName("tr");
-            for(i=0;i<tr.length; i++){
-                td = tr[i]document.getElementsByTagName("td");
+            tr = table.getElementsByTagName("tr");
+            for(i=1;i<tr.length; i++){
+                td = tr[i].getElementsByTagName("td");
                 if(td[4].innerHTML == colo ){
                     found = true;
                 }
@@ -200,7 +193,6 @@
                     tr[i].style.display="none";
                 }
             }
-        } {% endcomment %}
-    
+        }
     </script>
 </html>
