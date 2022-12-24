@@ -27,7 +27,8 @@
                 </div>
             </div>
         </nav>
-        <form>
+        <form method="POST">
+            {% csrf_token %}
             <div style="justify-content: space-evenly;">
                 <div class="row_wrap" style="margin-top: 15px; margin-bottom: 15px;">
                     <div class="putonleft">
@@ -114,15 +115,15 @@
                         <div class="putonleft">
                             <label for="quantity">Quantity</label>
                             <div class="col-sm-7">
-                                <input type="number" id="quantity" class="form-control" required placeholder="Quantity" style="margin-left: 55px;" name="Quantity" />
+                                <input type="number" id="quantity" min="1" class="form-control" required placeholder="Quantity" style="margin-left: 55px;" name="Quantity" />
                             </div>
                         </div>
                         <div class="putonright"></div>
                     </div>
                 </div>
                 <div>
+                    {% if StockList %}
                     <table class="table table-striped table-dark table-hover table-bordered" style="float: right;" name="stocklist">
-                        {% if StockList %}
                         <thead>
                             <tr>
                                 <th scope="col">Selection</th>
@@ -132,22 +133,22 @@
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
-                            {% for key,Order in StockList.items %}
+                            {% for key,Stock in StockList.items %}
                             <tr>
                                 <td><input type="radio" name="radio" value="{{key}}" onclick="getID();" class="form-check-input" /></td>
-                                <td>{{Order.Quality}}</td>
-                                <td>{{Order.Colour}}</td>
-                                <td>{{Order.Quantity}}</td>
+                                <td>{{Stock.Quality}}</td>
+                                <td>{{Stock.Colour}}</td>
+                                <td>{{Stock.Quantity}}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
-                        {% endif %}
                     </table>
+                    {% endif %}
                 </div>
             </div>
             <div class="row_wrap">
                 <div class="row_">
-                    <input type="submit" value="SAVE" class="btn btn-outline-secondary" name="add" onclick="saved()"/>
+                    <input type="submit" value="SAVE" class="btn btn-outline-secondary" name="SAVE" onclick="saved()"/>
                 </div>
                 <div class="row_">
                     <input type="submit" value="REMOVE" class="btn btn-outline-secondary" />
@@ -159,9 +160,8 @@
                     <input type="reset" value="CLEAR" class="btn btn-outline-secondary" />
                 </div>
             </div>
-
-            <input hidden type="text" value="{{StockList}}" name="StockList">
-            <input hidden type="number" value="" name="ID">
+            <input type="hidden" value="{{StockList}}" name="StockList"/>
+            <input type="hidden" value="" name="ID"/>
         </form>
     </body>
     <script>
@@ -205,6 +205,7 @@
 
             // Empty the target field
             $("#choices_to").empty();
+            $("#choices_to").append("<option value='' selected disabled>Select Name</option>");
 
             // For each chocie in the selected option
             for (i = 0; i < lookup[selectValue].length; i++) {
@@ -215,21 +216,22 @@
         if("{{StockList}}"){
             document.getElementById("options_from").setAttribute("disabled","");
             document.getElementById("options_to").setAttribute("disabled","");
-            document.getElementById("toName").setAttribute("disabled","");
-            document.getElementById("fromName").setAttribute("disabled","");
+            document.getElementById("choices_to").setAttribute("disabled","");
+            document.getElementById("choices_from").setAttribute("disabled","");
             document.getElementById("qual").setAttribute("disabled","");
             document.getElementById("options_from").value=fromtype;
             document.getElementById("options_to").value=totype;
-            document.getElementById("toName").value=toname;
-            document.getElementById("fromName").value=fromname;
+            document.getElementById("choices_to").value=toname;
+            document.getElementById("choices_from").value=fromname;
             document.getElementById("qual")=quality;  
         }
         var toname, totype,fromname,fromtype,quality;
         function saved(){
             fromtype = document.getElementById("options_from").value;
+            console.log(fromtype);
             totype = document.getElementById("options_to").value;
-            toname = document.getElementById("toName").value;
-            fromname = document.getElementById("fromName").value;
+            toname = document.getElementById("choices_to").value;
+            fromname = document.getElementById("choices_to").value;
             quality = document.getElementById("qual");   
         }
     </script>
