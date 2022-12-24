@@ -89,7 +89,7 @@
                     <div class="row_wrap">
                         <div class="putonleft">
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 75px;">Quality</label>
-                            <select class="form-select" aria-label="Default select example" required style="margin-left: 68px;" name="Quality">
+                            <select class="form-select" aria-label="Default select example" required style="margin-left: 68px;" name="Quality" id="qual">
                                 <option value="" selected disabled>Select Quality</option>
                                 {% for Quality in Qualities %}
                                 <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
@@ -147,10 +147,7 @@
             </div>
             <div class="row_wrap">
                 <div class="row_">
-                    <input type="submit" value="SAVE" class="btn btn-outline-secondary" name="add" />
-                </div>
-                <div class="row_">
-                    <button type="button" value="EDIT" class="btn btn-outline-secondary" onclick="edit()">EDIT</button>
+                    <input type="submit" value="SAVE" class="btn btn-outline-secondary" name="add" onclick="saved()"/>
                 </div>
                 <div class="row_">
                     <input type="submit" value="REMOVE" class="btn btn-outline-secondary" />
@@ -162,6 +159,9 @@
                     <input type="reset" value="CLEAR" class="btn btn-outline-secondary" />
                 </div>
             </div>
+
+            <input hidden type="text" value="{{StockList}}" name="StockList">
+            <input hidden type="number" value="" name="ID">
         </form>
     </body>
     <script>
@@ -212,5 +212,25 @@
                 $("#choices_to").append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
             }
         });
+        if("{{StockList}}"){
+            document.getElementById("options_from").setAttribute("disabled","");
+            document.getElementById("options_to").setAttribute("disabled","");
+            document.getElementById("toName").setAttribute("disabled","");
+            document.getElementById("fromName").setAttribute("disabled","");
+            document.getElementById("qual").setAttribute("disabled","");
+            document.getElementById("options_from").value=fromtype;
+            document.getElementById("options_to").value=totype;
+            document.getElementById("toName").value=toname;
+            document.getElementById("fromName").value=fromname;
+            document.getElementById("qual")=quality;  
+        }
+        var toname, totype,fromname,fromtype,quality;
+        function saved(){
+            fromtype = document.getElementById("options_from").value;
+            totype = document.getElementById("options_to").value;
+            toname = document.getElementById("toName").value;
+            fromname = document.getElementById("fromName").value;
+            quality = document.getElementById("qual");   
+        }
     </script>
 </html>
