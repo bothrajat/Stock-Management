@@ -75,12 +75,16 @@ def order_booking(request):
                     # print(data["CustomerName"])
                     customer = Customer.objects.get(CustomerName=data["CustomerName"])
                     quality = Quality.objects.get(Quality=data["Quality"])
-                    serialNo = SerialNo.objects.create(Order=order, Customer=customer,Quality=quality)
+                    serialNo = SerialNo.objects.create(
+                        Order=order, Customer=customer, Quality=quality
+                    )
                     Date = data["Date"]
                     for key, value in data["OrderList"].items():
                         OrderList_obj = OrderList()
-                        OrderList_obj.SerialNo=serialNo
-                        OrderList_obj.Colour = Colour.objects.get(Colour=value["Colour"])
+                        OrderList_obj.SerialNo = serialNo
+                        OrderList_obj.Colour = Colour.objects.get(
+                            Colour=value["Colour"]
+                        )
                         OrderList_obj.OrderedQuantity = value["Quantity"]
                         OrderList_obj.BalanceQuantity = value["Quantity"]
                         OrderList_obj.Date = Date
@@ -147,49 +151,49 @@ def consumption_record(request):
             # print(swit)
             if swit:
                 try:
-                    # print("I am in try")
                     for number in OtherConsumption.objects.all():
                         otherscons[number.id] = {
-                            "Quality":number.Quality.Quality,
-                            "Colour":number.Colour.Colour,
-                            "Quantity":number.Quantity
+                            "Quality": number.Quality.Quality,
+                            "Colour": number.Colour.Colour,
+                            "Quantity": number.Quantity,
                         }
                 except:
                     otherscons = None
             else:
                 try:
-                    
-                    for number in SerialNo.objects.filter(Customer = Customer.objects.get(CustomerName = customer)):
-                        for order in OrderList.objects.filter(SerialNo = number):
+
+                    for number in SerialNo.objects.filter(
+                        Customer=Customer.objects.get(CustomerName=customer)
+                    ):
+                        for order in OrderList.objects.filter(SerialNo=number):
                             stocks[order.id] = {
                                 "OrderNo": order.SerialNo.Order.OrderNo,
-                                "CustomerName":order.SerialNo.Customer.CustomerName,
+                                "CustomerName": order.SerialNo.Customer.CustomerName,
                                 "Quality": order.SerialNo.Quality.Quality,
                                 "Colour": order.Colour.Colour,
-                                "OrderedQuantity" : order.OrderedQuantity,
-                                "BalanceQuantity":order.BalanceQuantity,
-                                "Date": str(order.Date)
+                                "OrderedQuantity": order.OrderedQuantity,
+                                "BalanceQuantity": order.BalanceQuantity,
+                                "Date": str(order.Date),
                             }
                 except:
                     stocks = None
-           
+
             return render(
-                    request,
-                    "consumption_record.html",
-                    context={
-                        "Orders": Orders,
-                        "Colours": Colours,
-                        "Qualities": Qualities,
-                        "Customers": Customers,
-                        "Others": Others,
-                        "Stocks": stocks,
-                        "Othercons":otherscons
-                    },
-                )
-        
+                request,
+                "consumption_record.html",
+                context={
+                    "Orders": Orders,
+                    "Colours": Colours,
+                    "Qualities": Qualities,
+                    "Customers": Customers,
+                    "Others": Others,
+                    "Stocks": stocks,
+                    "Othercons": otherscons,
+                },
+            )
+
         if request.POST.get("submit"):
-           
-            idee = (request.POST.get("ID"))
+            idee = request.POST.get("ID")
             if idee:
                 idee = int(idee)
             else:
@@ -200,62 +204,58 @@ def consumption_record(request):
             stocks = {}
             if not swit:
                 customer = request.POST.get("customer")
-                
-                ordertook = OrderList.objects.get(id = idee)
+
+                ordertook = OrderList.objects.get(id=idee)
                 ordertook.BalanceQuantity -= consumedqty
                 ordertook.save()
-                for number in SerialNo.objects.filter(Customer = Customer.objects.get(CustomerName = customer)):
-                    for order in OrderList.objects.filter(SerialNo = number):
+                for number in SerialNo.objects.filter(
+                    Customer=Customer.objects.get(CustomerName=customer)
+                ):
+                    for order in OrderList.objects.filter(SerialNo=number):
                         stocks[order.id] = {
-                                "OrderNo": order.SerialNo.Order.OrderNo,
-                                "CustomerName":order.SerialNo.Customer.CustomerName,
-                                "Quality": order.SerialNo.Quality.Quality,
-                                "Colour": order.Colour.Colour,
-                                "OrderedQuantity" : order.OrderedQuantity,
-                                "BalanceQuantity":order.BalanceQuantity,
-                                "Date": str(order.Date)
-                            }
+                            "OrderNo": order.SerialNo.Order.OrderNo,
+                            "CustomerName": order.SerialNo.Customer.CustomerName,
+                            "Quality": order.SerialNo.Quality.Quality,
+                            "Colour": order.Colour.Colour,
+                            "OrderedQuantity": order.OrderedQuantity,
+                            "BalanceQuantity": order.BalanceQuantity,
+                            "Date": str(order.Date),
+                        }
 
             else:
-                
+
                 if idee <= 0:
                     quality = request.POST.get("Quality")
-                    colour =request.POST.get("Colour")
+                    colour = request.POST.get("Colour")
                     cons = OtherConsumption()
-                    cons.Quality = Quality.objects.get(Quality = quality)
-                    cons.Colour = Colour.objects.get(Colour = colour)
+                    cons.Quality = Quality.objects.get(Quality=quality)
+                    cons.Colour = Colour.objects.get(Colour=colour)
                     cons.Quantity = consumedqty
                     cons.save()
                 else:
-                    cons = OtherConsumption.objects.get(id = idee)
+                    cons = OtherConsumption.objects.get(id=idee)
                     cons.Quantity += consumedqty
                     cons.save()
 
                 for number in OtherConsumption.objects.all():
                     otherscons[number.id] = {
-                            "Quality":number.Quality.Quality,
-                            "Colour":number.Colour.Colour,
-                            "Quantity":number.Quantity
-                        }
+                        "Quality": number.Quality.Quality,
+                        "Colour": number.Colour.Colour,
+                        "Quantity": number.Quantity,
+                    }
             return render(
-                    request,
-                    "consumption_record.html",
-                    context={
-                        "Orders": Orders,
-                        "Colours": Colours,
-                        "Qualities": Qualities,
-                        "Customers": Customers,
-                        "Others": Others,
-                        "Stocks": stocks,
-                        "Othercons":otherscons
-                    },
-                )
-
-            
-
-
-
-            
+                request,
+                "consumption_record.html",
+                context={
+                    "Orders": Orders,
+                    "Colours": Colours,
+                    "Qualities": Qualities,
+                    "Customers": Customers,
+                    "Others": Others,
+                    "Stocks": stocks,
+                    "Othercons": otherscons,
+                },
+            )
     return render(
         request,
         "consumption_record.html",
@@ -279,41 +279,36 @@ def stock_movement(request):
         "Offices": json.dumps([office.Name for office in Offices]),
     }
     if request.method == "POST":
-        data = {}
-        data["StockList"] = request.POST.get("stocklist")
-        data["ID"] = request.POST.get("ID")
-        data["quality"] = request.POST.get("Quality")
-        data["colour"] = request.POST.get("Colour")
-        data["Quantity"] = int(request.POST.get("Quantity", 0))
-        data["FromType"] = request.POST.get("fromtype")
-        data["FromName"] = request.POST.get("fromName")
-        data["ToType"] = request.POST.get("totype")
-        data["ToName"] = request.POST.get("toName")
-        if not StockList:
-            StockList = {}
-            ID = 1
-        else:
-            StockList = ast.literal_eval(StockList)
-            if not ID:
-                ID = max(StockList.keys()) + 1
+        if request.POST.get("SAVE"):
+            data = {}
+            data["Quality"] = request.POST.get("Quality")
+            data["Colour"] = request.POST.get("Colour")
+            data["Quantity"] = request.POST.get("Quantity")
+            StockList = request.POST.get("StockList")
+            # print(data)
+            # print(StockList)
+            ID = request.POST.get("ID")
+            if StockList and StockList != "{}":
+                StockList = ast.literal_eval(StockList)
+                if not ID:
+                    ID = max(StockList.keys()) + 1
+                else:
+                    ID = int(ID)
             else:
-                ID = int(ID)
-
-        if request.POST.get("save"):
-            data["StockList"][data["ID"]] = {
-                "Quality": data["Quality"],
-                "Colour": data["Colour"],
+                StockList = {}
+                ID = 1
+            StockList[ID] = {
                 "Quantity": data["Quantity"],
+                "Colour": data["Colour"],
+                "Quality": data["Quality"],
             }
+            # print(StockList)
 
             return render(
-                    request,
-                    "consumption_record.html",
-                    context={
-                        **context,
-                        "StockList": StockList
-                    }
-                )
+                request,
+                "stock_movement.html",
+                context={**context, "StockList": StockList},
+            )
 
     return render(request, "stock_movement.html", context=context)
 
