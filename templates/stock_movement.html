@@ -213,6 +213,20 @@
                 $("#choices_to").append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
             }
         });
+        var toname;
+        var totype;
+        var fromname;
+        var fromtype;
+        var quality;
+
+        function saved(){
+            fromtype = document.getElementById("options_from").value;
+            totype = document.getElementById("options_to").value;
+            toname = document.getElementById("choices_to").value;
+            fromname = document.getElementById("choices_from").value;
+            quality = document.getElementById("qual").value;   
+        }
+
         if("{{StockList}}"){
             document.getElementById("options_from").setAttribute("disabled","");
             document.getElementById("options_to").setAttribute("disabled","");
@@ -223,16 +237,10 @@
             document.getElementById("options_to").value=totype;
             document.getElementById("choices_to").value=toname;
             document.getElementById("choices_from").value=fromname;
-            document.getElementById("qual")=quality;  
+            document.getElementById("qual").value=quality;  
+            
         }
-        var toname, totype,fromname,fromtype,quality;
-        function saved(){
-            fromtype = document.getElementById("options_from").value;
-            console.log(fromtype);
-            totype = document.getElementById("options_to").value;
-            toname = document.getElementById("choices_to").value;
-            fromname = document.getElementById("choices_to").value;
-            quality = document.getElementById("qual");   
-        }
+        
+        
     </script>
 </html>

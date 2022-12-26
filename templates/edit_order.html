@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
-        <link rel="stylesheet" href="{% static 'order_booking.css' %}" />
+        <link rel="stylesheet" href="{% static 'edit_order.css' %}" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
@@ -16,12 +16,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link active" href="/management/order-booking/">Order Booking</a>
+                    <a class="nav-item nav-link " href="/management/order-booking/">Order Booking</a>
                     <a class="nav-item nav-link" href="/management/stock-view/">Stock View</a>
                     <a class="nav-item nav-link" href="/management/consumption-record/">Consumption Record</a>
                     <a class="nav-item nav-link" href="/management/stock-movement/">Stock Movement</a>
                     <a class="nav-item nav-link" href="/management/production-input/">Production Input</a>
-                    <a class="nav-item nav-link" href="/management/edit-order/">Edit Order</a>
+                    <a class="nav-item nav-link active" href="/management/edit-order/">Edit Order</a>
 
                 </div>
             </div>
@@ -34,23 +34,26 @@
                     <label for="SerialNo">Serial No.</label>
                 </div>
                 <div class="col-sm-2">
-                    <input class="form-control" type="text" name="SerialNo" id="SerialNo" value="{{SerialNo}}" readonly>
+                    <input class="form-control" type="text" name="SerialNo" id="SerialNo" value="{{SerialNo}}">
                 </div>
                 <div class="col-sm-1" style="margin-left: 25px;">
                     <label for="OrderNo">Order No.</label>
                 </div>
                 <div class="col-sm-2">
-                    <input class="form-control" type="text" name="OrderNo" id="OrderNo" value="{{OrderNo}}" required
-                        placeholder="Order No." style="text-transform:uppercase;">
+                    <input class="form-control" type="text" name="OrderNo" id="OrderNo" value="{{OrderNo}}"
+                        placeholder="Order No." style="text-transform:uppercase;" readonly>
                 </div>
                 <div class="col-1" style="margin-left: 25px">
                     <label class="col-sm-2 col-form-label">Date</label>
                 </div>
                 <div class="col-sm-2">
-                    <input type="date" name="Date" id="dateoforder" value="{{Date}}" class="form-control" required>
+                    <input type="date" name="Date" id="dateoforder" value="{{Date}}" class="form-control" readonly>
                 </div>
             </div>
             <div class="colss">
+                <div class="row_wrap">
+                    <input type="submit" value="SEARCH" name="search" class="btn btn-outline-secondary" />
+                </div>
                 <div class="dwrap">
                     <div>
                         <div class="row_wrap">
@@ -59,7 +62,7 @@
                                 Customer Name
                                 </label>
                                 <div class="col-12">
-                                    <select class="form-select" value="{{ CustomerName }}" id="CustomerName" aria-label="Default select example" required style="margin-left: 0px;">
+                                    <select class="form-select" value="{{ CustomerName }}" id="CustomerName" aria-label="Default select example" disabled style="margin-left: 0px;">
                                         <option value="" selected disabled>Select Customer.</option>
                                         {% for Customer in Customers %}
                                         <option value="{{ Customer.CustomerName }}">
@@ -74,7 +77,7 @@
                         <div class="row_wrap">
                             <div class="putonleft">
                                 <label class="my-1 mr-2" for="Quality" style="margin-right: 80px;">Quality</label>
-                                <select class="form-select" value="{{ Quality }}" id="Quality" aria-label="Default select example" required style="margin-left: 25px;">
+                                <select class="form-select" value="{{ Quality }}" id="Quality" aria-label="Default select example" required style="margin-left: 25px;" disabled>
                                     <option value="" selected disabled>Select Quality.</option>
                                     {% for Quality in Qualities %}
                                     <option value="{{ Quality.Quality }}">
@@ -88,7 +91,7 @@
                         <div class="row_wrap">
                             <div class="putonleft">
                                 <label class="my-1 mr-2" for="Colour" style="margin-right: 80px;">Colour</label>
-                                <select class="form-select" name="Colour" id="Colour" aria-label="Default select example" required style="margin-left: 27px;">
+                                <select class="form-select" name="Colour" id="Colour" aria-label="Default select example" style="margin-left: 27px;">
                                     <option value="" selected disabled>Select Colour.</option>
                                     {% for Colour in Colours %}
                                     <option value="{{ Colour.Colour }}">
@@ -103,7 +106,7 @@
                             <div class="putonleft">
                                 <label class="my-1 mr-2" for="Quantity">Quantity</label>
                                 <div class="col-sm-7">
-                                    <input type="number" name="Quantity" id="Quantity" class="form-control" min="1" required placeholder="Quantity" style="margin-left: 83px;" />
+                                    <input type="number" name="Quantity" id="Quantity" class="form-control" min="1" placeholder="Quantity" style="margin-left: 83px;" />
                                 </div>
                             </div>
                             <div class="putonright"></div>

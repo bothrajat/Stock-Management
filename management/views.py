@@ -349,3 +349,79 @@ def production_input(request):
         "production_record.html",
         context={**context},
     )
+
+
+def edit_order(request):
+    Qualities = Quality.objects.all()
+    Colours = Colour.objects.all()
+    Customers = Customer.objects.all()
+    serialNo = SerialNo.objects.count() + 1
+    Orderlist = {}
+    context = {
+        "SerialNo": serialNo,
+        "Colours": Colours,
+        "Qualities": Qualities,
+        "Customers": Customers,
+    }
+    if request.method == "POST":
+        data = collect(request)
+        if request.POST.get("search"):
+            sNo = request.POST.get("SerialNo")
+            orderats = OrderList.objects.get(id=sNo)
+            
+
+        if request.POST.get("save"):
+            data["OrderList"][data["ID"]] = {
+                "Colour": data["Colour"],
+                "Quantity": data["Quantity"],
+            }
+
+        elif request.POST.get("remove"):
+            del data["OrderList"][data["ID"]]
+            if not data["OrderList"]:
+                return redirect("edit-order")
+
+        elif request.POST.get("submit"):
+            try:
+                with transaction.atomic():
+                    try:
+                        order = Order.objects.get(OrderNo=data["OrderNo"])
+                    except:
+                        order = Order.objects.create(OrderNo=data["OrderNo"])
+                    # print(data["CustomerName"])
+                    customer = Customer.objects.get(CustomerName=data["CustomerName"])
+                    quality = Quality.objects.get(Quality=data["Quality"])
+                    serialNo = SerialNo.objects.create(
+                        Order=order, Customer=customer, Quality=quality
+                    )
+                    Date = data["Date"]
+                    for key, value in data["OrderList"].items():
+                        OrderList_obj = OrderList()
+                        OrderList_obj.SerialNo = serialNo
+                        OrderList_obj.Colour = Colour.objects.get(
+                            Colour=value["Colour"]
+                        )
+                        OrderList_obj.OrderedQuantity = value["Quantity"]
+                        OrderList_obj.BalanceQuantity = value["Quantity"]
+                        OrderList_obj.Date = Date
+                        OrderList_obj.save()
+                    return redirect("edit-order")
+            except:
+                print("Error OCCURREDD")
+
+        return render(
+            request,
+            "edit_order.html",
+            context={
+                **data,
+                **context,
+            },
+        )
+    return render(
+        request,
+        "edit_order.html",
+        context={
+            **context,
+            "OrderList": Orderlist,
+        },
+    )   
