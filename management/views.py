@@ -115,9 +115,9 @@ def stock_view(request):
     FactStock = FactoryStock.objects.all()
     OffStock = OfficeStock.objects.all()
     DyeStock = DyeingStock.objects.all()
-    Orders = OrderList.objects.all().order_by("Order")
+    Orders = OrderList.objects.all()
     FinStock = FinishingStock.objects.all()
-
+    
     return render(
         request,
         "stock_view.html",
