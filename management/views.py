@@ -369,6 +369,7 @@ def edit_order(request):
             sNo = request.POST.get("SerialNo")
             orderats = OrderList.objects.get(id=sNo)
             
+            
 
         if request.POST.get("save"):
             data["OrderList"][data["ID"]] = {

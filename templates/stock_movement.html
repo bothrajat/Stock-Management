@@ -24,6 +24,8 @@
                     <a class="nav-item nav-link" href="/management/consumption-record/">Consumption Record</a>
                     <a class="nav-item nav-link active" href="/management/stock-movement/">Stock Movement</a>
                     <a class="nav-item nav-link" href="/management/production-input/">Production Input</a>
+                    <a class="nav-item nav-link" href="/management/edit-order/">Edit Order</a>
+
                 </div>
             </div>
         </nav>
@@ -222,8 +224,8 @@
         function saved(){
             fromtype = document.getElementById("options_from").value;
             totype = document.getElementById("options_to").value;
-            toname = document.getElementById("choices_to").value;
-            fromname = document.getElementById("choices_from").value;
+            {% comment %} toname = document.getElementById("choices_to").value;
+            fromname = document.getElementById("choices_from").value; {% endcomment %}
             quality = document.getElementById("qual").value;   
         }
 
@@ -235,9 +237,7 @@
             document.getElementById("qual").setAttribute("disabled","");
             document.getElementById("options_from").value=fromtype;
             document.getElementById("options_to").value=totype;
-            document.getElementById("choices_to").value=toname;
-            document.getElementById("choices_from").value=fromname;
-            document.getElementById("qual").value=quality;  
+            document.getElementById("qual").value=quality; 
             
         }
         
