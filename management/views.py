@@ -75,10 +75,10 @@ def order_booking(request):
                     # print(data["CustomerName"])
                     customer = Customer.objects.get(CustomerName=data["CustomerName"])
                     quality = Quality.objects.get(Quality=data["Quality"])
-                    serialNo = SerialNo.objects.create(
-                        Order=order, Customer=customer, Quality=quality
-                    )
                     Date = data["Date"]
+                    serialNo = SerialNo.objects.create(
+                        Order=order, Customer=customer, Quality=quality, Date=Date
+                    )
                     for key, value in data["OrderList"].items():
                         OrderList_obj = OrderList()
                         OrderList_obj.SerialNo = serialNo
@@ -87,7 +87,6 @@ def order_booking(request):
                         )
                         OrderList_obj.OrderedQuantity = value["Quantity"]
                         OrderList_obj.BalanceQuantity = value["Quantity"]
-                        OrderList_obj.Date = Date
                         OrderList_obj.save()
                     return redirect("order-booking")
             except:
@@ -352,88 +351,74 @@ def production_input(request):
 
 
 def edit_order(request):
-    Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Customers = Customer.objects.all()
-    serialNo = SerialNo.objects.count() + 1
-    Orderlist = {}
-    context = {
-        "SerialNo": serialNo,
+    context={
         "Colours": Colours,
-        "Qualities": Qualities,
-        "Customers": Customers,
     }
     if request.method == "POST":
         data = collect(request)
-    
+        sNo = SerialNo.objects.get(id=int(request.POST.get("SerialNo")))
+        context["SerialNo"] = sNo
         if request.POST.get("search"):
-            sNo = int(request.POST.get("SerialNo"))
-            for index,number in enumerate(OrderList.objects.filter(SerialNo=SerialNo.objects.get(id=sNo))):
-                print(index, number)
-                data["OrderList"][index+1]=number
+            data["OrderList"] = {}
+            for index,number in enumerate(OrderList.objects.filter(SerialNo=sNo)):
+                # print(index, number)
+                data["OrderList"][index+1]={
+                "Colour": number.Colour.Colour,
+                "Quantity": number.OrderedQuantity,
+            }
             return render(
             request,
             "edit_order.html",
             context={
-                **data,
                 **context,
+                **data,
             },
         )
-                
-            
-
+        
         if request.POST.get("save"):
             data["OrderList"][data["ID"]] = {
                 "Colour": data["Colour"],
                 "Quantity": data["Quantity"],
             }
+            return render(
+            request,
+            "edit_order.html",
+            context={
+                **context,
+                **data,
+            },
+        )
 
         elif request.POST.get("remove"):
             del data["OrderList"][data["ID"]]
-            if not data["OrderList"]:
-                return redirect("edit-order")
+            return render(
+            request,
+            "edit_order.html",
+            context={
+                **context,
+                **data,
+            },
+        )
 
         elif request.POST.get("submit"):
             try:
                 with transaction.atomic():
-                    try:
-                        order = Order.objects.get(OrderNo=data["OrderNo"])
-                    except:
-                        order = Order.objects.create(OrderNo=data["OrderNo"])
-                    # print(data["CustomerName"])
-                    customer = Customer.objects.get(CustomerName=data["CustomerName"])
-                    quality = Quality.objects.get(Quality=data["Quality"])
-                    serialNo = SerialNo.objects.create(
-                        Order=order, Customer=customer, Quality=quality
-                    )
-                    Date = data["Date"]
+                    OrderList.objects.filter(SerialNo=sNo).delete()
                     for key, value in data["OrderList"].items():
                         OrderList_obj = OrderList()
-                        OrderList_obj.SerialNo = serialNo
+                        OrderList_obj.SerialNo = sNo
                         OrderList_obj.Colour = Colour.objects.get(
                             Colour=value["Colour"]
                         )
                         OrderList_obj.OrderedQuantity = value["Quantity"]
                         OrderList_obj.BalanceQuantity = value["Quantity"]
-                        OrderList_obj.Date = Date
                         OrderList_obj.save()
                     return redirect("edit-order")
             except:
                 print("Error OCCURREDD")
 
-        return render(
-            request,
-            "edit_order.html",
-            context={
-                **data,
-                **context,
-            },
-        )
     return render(
         request,
-        "edit_order.html",
-        context={
-            **context,
-            "OrderList": Orderlist,
-        },
+        "edit_order.html"
     )   
