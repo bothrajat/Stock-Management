@@ -164,14 +164,6 @@ form {
   padding: 5px;
 }
 
-
-table{
-  counter-reset: Serial;
-}
-tr td:first-child:before {
-  counter-increment: Serial;
-  content: "" counter(Serial);
-}
 .test{
   background: linear-gradient(145deg, #18924E, #22CC6E);
   border-radius: 67%;
