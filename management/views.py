@@ -365,10 +365,21 @@ def edit_order(request):
     }
     if request.method == "POST":
         data = collect(request)
+    
         if request.POST.get("search"):
-            sNo = request.POST.get("SerialNo")
-            orderats = OrderList.objects.get(id=sNo)
-            
+            sNo = int(request.POST.get("SerialNo"))
+            for index,number in enumerate(OrderList.objects.filter(SerialNo=SerialNo.objects.get(id=sNo))):
+                print(index, number)
+                data["OrderList"][index+1]=number
+            return render(
+            request,
+            "edit_order.html",
+            context={
+                **data,
+                **context,
+            },
+        )
+                
             
 
         if request.POST.get("save"):
