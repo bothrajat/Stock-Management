@@ -13,22 +13,22 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         df = pd.read_csv('customers.csv')
-        for cust in zip(df.Customers):
+        for cust in df.Customers:
             model =Customer(CustomerName = cust)
             model.save()
 
         df1 = pd.read_csv('quality.csv')
-        for qual in zip(df1.Quality):
+        for qual in df1.Quality:
             model =Quality(Quality= qual)
             model.save()
 
         df2 = pd.read_csv('colour.csv')
-        for colo in zip(df2.Colour):
+        for colo in df2.Colour:
             model = Colour(Colour=colo)
             model.save()
 
         df3 = pd.read_csv('order.csv')
-        for ord in zip(df3.Order):
+        for ord in df3.Order:
             model = Order(OrderNo = ord)
             model.save()
 
