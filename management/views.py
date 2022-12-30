@@ -313,7 +313,9 @@ def stock_movement(request):
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Factories = Jobworker.objects.filter(Role=factory)
+    Factories = Jobworker.objects.filter(Role='factory')
+
+    
     context = {
         "Colours": Colours,
         "Qualities": Qualities,
@@ -322,7 +324,7 @@ def production_input(request):
     if request.method == "POST":
         quality = request.POST.get("Quality")
         colour = request.POST.get("Colour")
-        factory = Jobworker.objects.get(Name=request.POST.get("Factory"))
+        factory = Jobworker.objects.get(WorkerName=request.POST.get("Factory"))
         Quantity = int(request.POST.get("Quantity", 0))
         try:
             stocks = FactoryStock.objects.get(

@@ -41,7 +41,7 @@
       <select class="form-select" aria-label="Default select example" required name="Factory" id ="factname">
         <option value="">Select Factory</option>
             {% for Factory in Factories %}
-            <option value="{{ Factory.Name }}">{{ Factory.Name }}</option>
+            <option value="{{ Factory.WorkerName }}">{{ Factory.WorkerName }}</option>
             {% endfor %}
       </select>
     </div>
