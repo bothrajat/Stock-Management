@@ -265,17 +265,15 @@ def consumption_record(request):
 def stock_movement(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Dyers = Dyer.objects.all()
-    Finishers = Finisher.objects.all()
-    Offices = Office.objects.all()
-    Factories = Factory.objects.all()
+    Jobworkers = Jobworker.objects.all()
     context = {
         "Colours": Colours,
         "Qualities": Qualities,
-        "Dyers": json.dumps([dyer.Name for dyer in Dyers]),
-        "Finishers": json.dumps([finisher.Name for finisher in Finishers]),
-        "Factories": json.dumps([factory.Name for factory in Factories]),
-        "Offices": json.dumps([office.Name for office in Offices]),
+        "Jobworkers":Jobworkers
+        # "Dyers": json.dumps([dyer.Name for dyer in Dyers]),
+        # "Finishers": json.dumps([finisher.Name for finisher in Finishers]),
+        # "Factories": json.dumps([factory.Name for factory in Factories]),
+        # "Offices": json.dumps([office.Name for office in Offices]),
     }
     if request.method == "POST":
         if request.POST.get("SAVE"):
@@ -315,7 +313,7 @@ def stock_movement(request):
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Factories = Factory.objects.all()
+    Factories = Jobworker.objects.filter(Role=factory)
     context = {
         "Colours": Colours,
         "Qualities": Qualities,
@@ -324,7 +322,7 @@ def production_input(request):
     if request.method == "POST":
         quality = request.POST.get("Quality")
         colour = request.POST.get("Colour")
-        factory = Factory.objects.get(Name=request.POST.get("Factory"))
+        factory = Jobworker.objects.get(Name=request.POST.get("Factory"))
         Quantity = int(request.POST.get("Quantity", 0))
         try:
             stocks = FactoryStock.objects.get(

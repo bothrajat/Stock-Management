@@ -32,46 +32,34 @@ class OrderList(models.Model):
     OrderedQuantity = models.PositiveIntegerField()
     BalanceQuantity = models.PositiveIntegerField()
 
-
-class Office(models.Model):
-    Name = models.CharField(max_length=10, unique=True)
-
-
-class Factory(models.Model):
-    Name = models.CharField(max_length=20, unique=True)
-
-
-class Dyer(models.Model):
-    Name = models.CharField(max_length=256, unique=True)
-
-
-class Finisher(models.Model):
-    Name = models.CharField(max_length=256, unique=True)
+class Jobworker(models.Model):
+    Role = models.CharField(max_length=32)
+    WorkerName = models.CharField(max_length=64)
 
 
 class DyeingStock(models.Model):
-    Dyer = models.ForeignKey(Dyer, on_delete=models.DO_NOTHING)
+    Dyer = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveIntegerField()
 
 
 class FinishingStock(models.Model):
-    Finisher = models.ForeignKey(Finisher, on_delete=models.DO_NOTHING)
+    Finisher = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveIntegerField()
 
 
 class OfficeStock(models.Model):
-    Office = models.ForeignKey(Office, on_delete=models.DO_NOTHING)
+    Office = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveIntegerField()
 
 
 class FactoryStock(models.Model):
-    Factory = models.ForeignKey(Factory, on_delete=models.DO_NOTHING)
+    Factory = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveIntegerField()
@@ -85,8 +73,8 @@ class OtherConsumption(models.Model):
 
 
 class Movement(models.Model):
-    FromName = models.ForeignKey
-    ToName = models.ForeignKey
+    FromName = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING, related_name='from_name')
+    ToName = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING, related_name='to_name')
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     COlour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveBigIntegerField()
