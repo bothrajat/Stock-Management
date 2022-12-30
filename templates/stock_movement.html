@@ -33,7 +33,10 @@
             {% csrf_token %}
             <div style="justify-content: space-evenly;">
                 <div class="row_wrap" style="margin-top: 15px; margin-bottom: 15px;">
-                    <div class="putonleft">
+                    <div class="col-2">
+                        <label class="my-1 mr-2">Challan Number</label>
+                        <input type="number" class="form-control" name="challan">
+                    </div>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 50px;">From</label>
                         <select class="form-select" id="options_from" aria-label="Default select example" required style="margin-right: 50px;" name="fromtype">
                             <option value="" selected disabled>
@@ -57,11 +60,13 @@
                             <select class="form-select" id="choices_from" aria-label="Default select example" required style="margin-right: 50px;" name="fromName">
                                 <option value="" selected disabled>Select Name</option>
                             </select>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="row_wrap" style="margin-top: 15px; margin-bottom: 15px;">
-                    <div class="putonleft">
+                    <div class="col-2">
+                        <input type="submit" value="SEARCH" class="btn btn-outline-secondary" name="SEARCH" onclick="search()"/>
+                    </div>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 70px;">To</label>
                         <select class="form-select" id="options_to" aria-label="Default select example" required style="margin-right:50px" name="totype">
                             <option value="" selected disabled>Select Type</option>
@@ -83,7 +88,7 @@
                             <select class="form-select" id="choices_to" aria-label="Default select example" required style="margin-right: 50px;" name="toName">
                                 <option value="" selected disabled>Select Name</option>
                             </select>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
