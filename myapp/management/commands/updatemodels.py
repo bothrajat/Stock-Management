@@ -37,4 +37,9 @@ class Command(BaseCommand):
             model = SerialNo(Customer=Customer.objects.get(CustomerName = cust), Order = Order.objects.get(OrderNo=ord), Quality=Quality.objects.get(Quality=qual), Date = date)
             model.save()
 
+        df5  =pd.read_csv('work.csv')
+        for role, name in zip(df5.Role, df5.Name):
+            model  = Jobworker(Role = role, WorkerName = name)
+            model.save()
+            
         

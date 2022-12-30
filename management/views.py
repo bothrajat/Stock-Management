@@ -276,6 +276,10 @@ def stock_movement(request):
         "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
         "Factories": json.dumps([factory.WorkerName for factory in Factories]),
         "Offices": json.dumps([office.WorkerName for office in Offices]),
+        "Dyers": json.dumps([dyer.WorkerName for dyer in Dyers]),
+        "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
+        "Factories": json.dumps([factory.WorkerName for factory in Factories]),
+        "Offices": json.dumps([office.WorkerName for office in Offices]),
     }
     if request.method == "POST":
         if request.POST.get("SAVE"):
