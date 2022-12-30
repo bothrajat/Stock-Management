@@ -269,17 +269,9 @@ def stock_movement(request):
     Finishers = Jobworker.objects.filter(Role="finisher")
     Factories = Jobworker.objects.filter(Role="factory")
     Offices = Jobworker.objects.filter(Role="office")
-    Dyers = Jobworker.objects.filter(Role="Dyer")
-    Finishers = Jobworker.objects.filter(Role="Finisher")
-    Factories = Jobworker.objects.filter(Role="Factory")
-    Offices = Jobworker.objects.filter(Role="Office")
     context = {
         "Colours": Colours,
         "Qualities": Qualities,
-        "Dyers": json.dumps([dyer.WorkerName for dyer in Dyers]),
-        "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
-        "Factories": json.dumps([factory.WorkerName for factory in Factories]),
-        "Offices": json.dumps([office.WorkerName for office in Offices]),
         "Dyers": json.dumps([dyer.WorkerName for dyer in Dyers]),
         "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
         "Factories": json.dumps([factory.WorkerName for factory in Factories]),
