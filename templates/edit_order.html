@@ -34,20 +34,20 @@
                     <label for="SerialNo">Serial No.</label>
                 </div>
                 <div class="col-sm-2">
-                    <input class="form-control" type="text" name="SerialNo" id="SerialNo" value="{{SerialNo}}">
+                    <input class="form-control" type="text" name="SerialNo" id="SerialNo" value="{{SerialNo.id}}">
                 </div>
                 <div class="col-sm-1" style="margin-left: 25px;">
                     <label for="OrderNo">Order No.</label>
                 </div>
                 <div class="col-sm-2">
-                    <input class="form-control" type="text" name="OrderNo" id="OrderNo" value="{{OrderNo}}"
+                    <input class="form-control" type="text" name="OrderNo" id="OrderNo" value="{{SerialNo.Order.OrderNo}}"
                         placeholder="Order No." style="text-transform:uppercase;" readonly>
                 </div>
                 <div class="col-1" style="margin-left: 25px">
                     <label class="col-sm-2 col-form-label">Date</label>
                 </div>
                 <div class="col-sm-2">
-                    <input type="date" name="Date" id="dateoforder" value="{{Date}}" class="form-control" readonly>
+                    <input type="text" name="Date" id="dateoforder" value="{{SerialNo.Date}}" class="form-control" readonly>
                 </div>
             </div>
             <div class="colss">
@@ -62,14 +62,7 @@
                                 Customer Name
                                 </label>
                                 <div class="col-12">
-                                    <select class="form-select" value="{{ CustomerName }}" id="CustomerName" aria-label="Default select example" disabled style="margin-left: 0px;">
-                                        <option value="" selected disabled>Select Customer.</option>
-                                        {% for Customer in Customers %}
-                                        <option value="{{ Customer.CustomerName }}">
-                                            {{ Customer.CustomerName }}
-                                        </option>
-                                        {% endfor %}
-                                    </select>
+                                    <input class="form-control" value="{{ SerialNo.Customer.CustomerName }}" id="CustomerName" aria-label="Default select example" readonly style="margin-left: 0px;"/>
                                 </div>
                             </div>
                             <div class="putonright"></div>
@@ -77,14 +70,7 @@
                         <div class="row_wrap">
                             <div class="putonleft">
                                 <label class="my-1 mr-2" for="Quality" style="margin-right: 80px;">Quality</label>
-                                <select class="form-select" value="{{ Quality }}" id="Quality" aria-label="Default select example" required style="margin-left: 25px;" disabled>
-                                    <option value="" selected disabled>Select Quality.</option>
-                                    {% for Quality in Qualities %}
-                                    <option value="{{ Quality.Quality }}">
-                                        {{ Quality.Quality }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+                                <input class="form-control" value="{{ SerialNo.Quality.Quality }}" id="Quality" aria-label="Default select example" required style="margin-left: 25px;" readonly/>
                             </div>
                             <div class="putonright"></div>
                         </div>
@@ -132,8 +118,8 @@
                                     <td>
                                         <input type="radio" name="radio" value="{{ key }}" onclick="getID()" class="form-check-input" />
                                     </td>
-                                    <td>{{ Order.Colour.Colour }}</td>
-                                    <td>{{ Order.OrderedQuantity }}</td>
+                                    <td>{{ Order.Colour }}</td>
+                                    <td>{{ Order.Quantity }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -161,9 +147,6 @@
         </form>
         </div>
         <script>
-            let dte = new Date();
-            let date_now = dte.toJSON().split('T')[0];
-            document.getElementById('dateoforder').value = date_now;
             eval("var OrderList=" + document.getElementById("OrderList").value);
             if ("{{CustomerName}}"){
                 document.getElementById("CustomerName").value="{{CustomerName}}";
