@@ -22,6 +22,7 @@ class SerialNo(models.Model):
     Order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Date = models.DateField()
+
     class Meta:
         unique_together = (("Customer", "Order"),)
 
@@ -32,8 +33,17 @@ class OrderList(models.Model):
     OrderedQuantity = models.PositiveIntegerField()
     BalanceQuantity = models.PositiveIntegerField()
 
+
 class Jobworker(models.Model):
-    Role = models.CharField(max_length=32)
+    Role = models.CharField(
+        max_length=32,
+        choices=[
+            ("Office", "Office"),
+            ("Dyer", "Dyer"),
+            ("Finisher", "Finisher"),
+            ("Factory", "Factory"),
+        ],
+    )
     WorkerName = models.CharField(max_length=64)
 
 
@@ -71,10 +81,13 @@ class OtherConsumption(models.Model):
     Quantity = models.PositiveIntegerField()
 
 
-
 class Movement(models.Model):
-    FromName = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING, related_name='from_name')
-    ToName = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING, related_name='to_name')
+    FromName = models.ForeignKey(
+        Jobworker, on_delete=models.DO_NOTHING, related_name="from_name"
+    )
+    ToName = models.ForeignKey(
+        Jobworker, on_delete=models.DO_NOTHING, related_name="to_name"
+    )
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
-    COlour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
+    Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveBigIntegerField()
