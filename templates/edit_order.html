@@ -52,7 +52,7 @@
             </div>
             <div class="colss">
                 <div class="row_wrap">
-                    <input type="submit" value="SEARCH" name="search" class="btn btn-outline-secondary" />
+                    <input type="submit" value="SEARCH" name="search" class="btn btn-outline-secondary" onclick="sear()" />
                 </div>
                 <div class="dwrap">
                     <div>
@@ -229,6 +229,12 @@
                 document.getElementById("Colour").value = "";
                 document.getElementById("Quantity").value = "";
                 document.getElementById("ID").value = "";
+            }
+            if("{{ OrderList }}"){
+
+            }
+            function sear(){
+                document.getElementById("Quality").value = 
             }
         </script>
     </body>

@@ -82,3 +82,12 @@ class OtherConsumption(models.Model):
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveIntegerField()
+
+
+
+class Movement(models.Model):
+    FromName = models.ForeignKey
+    ToName = models.ForeignKey
+    Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+    COlour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
+    Quantity = models.PositiveBigIntegerField()
