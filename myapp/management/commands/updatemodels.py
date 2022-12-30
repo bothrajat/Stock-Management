@@ -12,30 +12,30 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        df = pd.read_csv('customers.csv')
-        for cust in df.Customers:
-            model =Customer(CustomerName = cust)
-            model.save()
+        # df = pd.read_csv('customers.csv')
+        # for cust in df.Customers:
+        #     model =Customer(CustomerName = cust)
+        #     model.save()
 
-        df1 = pd.read_csv('quality.csv')
-        for qual in df1.Quality:
-            model =Quality(Quality= qual)
-            model.save()
+        # df1 = pd.read_csv('quality.csv')
+        # for qual in df1.Quality:
+        #     model =Quality(Quality= qual)
+        #     model.save()
 
-        df2 = pd.read_csv('colour.csv')
-        for colo in df2.Colour:
-            model = Colour(Colour=colo)
-            model.save()
+        # df2 = pd.read_csv('colour.csv')
+        # for colo in df2.Colour:
+        #     model = Colour(Colour=colo)
+        #     model.save()
 
-        df3 = pd.read_csv('order.csv')
-        for ord in df3.Order:
-            model = Order(OrderNo = ord)
-            model.save()
+        # df3 = pd.read_csv('order.csv')
+        # for ord in df3.Order:
+        #     model = Order(OrderNo = ord)
+        #     model.save()
 
-        df4 = pd.read_csv('sno.csv')
-        for cust, ord, qual, date in zip(df4.Customer, df4.Order, df4.Quality, df4.Date):
-            model = SerialNo(Customer=Customer.objects.get(CustomerName = cust), Order = Order.objects.get(OrderNo=ord), Quality=Quality.objects.get(Quality=qual), Date = date)
-            model.save()
+        # df4 = pd.read_csv('sno.csv')
+        # for cust, ord, qual, date in zip(df4.Customer, df4.Order, df4.Quality, df4.Date):
+        #     model = SerialNo(Customer=Customer.objects.get(CustomerName = cust), Order = Order.objects.get(OrderNo=ord), Quality=Quality.objects.get(Quality=qual), Date = date)
+        #     model.save()
 
         df5  =pd.read_csv('work.csv')
         for role, name in zip(df5.Role, df5.Name):

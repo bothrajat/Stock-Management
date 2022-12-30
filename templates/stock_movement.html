@@ -226,7 +226,13 @@
             totype = document.getElementById("options_to").value;
             toname = document.getElementById("choices_to").value;
             fromname = document.getElementById("choices_from").value;
-            quality = document.getElementById("qual").value;   
+            quality = document.getElementById("qual").value;
+            document.getElementById("options_from").value=fromtype;
+            document.getElementById("options_to").value=totype;
+            document.getElementById("choices_to").value=toname;
+            document.getElementById("choices_from").value=fromname;
+            document.getElementById("qual").value = quality;
+
         }
 
         if("{{StockList}}"){
