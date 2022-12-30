@@ -265,15 +265,17 @@ def consumption_record(request):
 def stock_movement(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Jobworkers = Jobworker.objects.all()
+    Dyers = Jobworker.objects.filter(Role = 'dyer')
+    Finishers = Jobworker.objects.filter(Role = 'finisher')
+    Factories = Jobworker.objects.filter(Role = 'factory')
+    Offices = Jobworker.objects.filter(Role = 'office')
     context = {
         "Colours": Colours,
         "Qualities": Qualities,
-        "Jobworkers":Jobworkers
-        # "Dyers": json.dumps([dyer.Name for dyer in Dyers]),
-        # "Finishers": json.dumps([finisher.Name for finisher in Finishers]),
-        # "Factories": json.dumps([factory.Name for factory in Factories]),
-        # "Offices": json.dumps([office.Name for office in Offices]),
+        "Dyers": json.dumps([dyer.WorkerName for dyer in Dyers]),
+        "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
+        "Factories": json.dumps([factory.WorkerName for factory in Factories]),
+        "Offices": json.dumps([office.WorkerName for office in Offices]),
     }
     if request.method == "POST":
         if request.POST.get("SAVE"):
