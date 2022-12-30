@@ -265,13 +265,24 @@ def consumption_record(request):
 def stock_movement(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
+<<<<<<< HEAD
     Dyers = Jobworker.objects.filter(Role="dyer")
     Finishers = Jobworker.objects.filter(Role="finisher")
     Factories = Jobworker.objects.filter(Role="factory")
     Offices = Jobworker.objects.filter(Role="office")
+=======
+    Dyers = Jobworker.objects.filter(Role="Dyer")
+    Finishers = Jobworker.objects.filter(Role="Finisher")
+    Factories = Jobworker.objects.filter(Role="Factory")
+    Offices = Jobworker.objects.filter(Role="Office")
+>>>>>>> c6416f9deaf79c8a3cc62008a2750668307d0685
     context = {
         "Colours": Colours,
         "Qualities": Qualities,
+        "Dyers": json.dumps([dyer.WorkerName for dyer in Dyers]),
+        "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
+        "Factories": json.dumps([factory.WorkerName for factory in Factories]),
+        "Offices": json.dumps([office.WorkerName for office in Offices]),
         "Dyers": json.dumps([dyer.WorkerName for dyer in Dyers]),
         "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
         "Factories": json.dumps([factory.WorkerName for factory in Factories]),
