@@ -276,10 +276,6 @@ def stock_movement(request):
         "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
         "Factories": json.dumps([factory.WorkerName for factory in Factories]),
         "Offices": json.dumps([office.WorkerName for office in Offices]),
-        "Dyers": json.dumps([dyer.WorkerName for dyer in Dyers]),
-        "Finishers": json.dumps([finisher.WorkerName for finisher in Finishers]),
-        "Factories": json.dumps([factory.WorkerName for factory in Factories]),
-        "Offices": json.dumps([office.WorkerName for office in Offices]),
     }
     if request.method == "POST":
         if request.POST.get("SAVE"):
@@ -319,8 +315,7 @@ def stock_movement(request):
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Factories = Jobworker.objects.filter(Role='factory')
-
+    Factories = Jobworker.objects.filter(Role='Factory')
     
     context = {
         "Colours": Colours,
