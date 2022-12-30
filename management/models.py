@@ -81,7 +81,8 @@ class OtherConsumption(models.Model):
     Quantity = models.PositiveIntegerField()
 
 
-class Movement(models.Model):
+class Challan(models.Model):
+    ChallanNo = models.PositiveIntegerField(primary_key=True)
     FromName = models.ForeignKey(
         Jobworker, on_delete=models.DO_NOTHING, related_name="from_name"
     )
@@ -89,5 +90,9 @@ class Movement(models.Model):
         Jobworker, on_delete=models.DO_NOTHING, related_name="to_name"
     )
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
+
+
+class Movement(models.Model):
+    Challan = models.ForeignKey(Challan, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
     Quantity = models.PositiveBigIntegerField()
