@@ -1,0 +1,13 @@
+﻿Customer,Order,Quality,Date
+Customer 1,1,"2""SECOND",25-12-2022
+Customer 2,1,"2""SUPER",12-04-2021
+Customer 3,1,"2""DELUXE",21-06-2022
+Customer 4,1,"1.5""SECOND",26-07-2020
+Customer 1,2,"1.5""SECOND",07-08-2022
+Customer 2,2,"1.5""SUPER",06-09-2022
+Customer 3,2,"1.5""DELUXE",18-12-2022
+Customer 4,2,"1.5""SECOND",25-12-2022
+Customer 1,3,"1.5""SECOND",12-04-2021
+Customer 2,4,"1.5""SUPER",21-06-2022
+Customer 3,5,"1.5""DELUXE",26-07-2020
+Customer 4,6,"1.5""SECOND",07-08-2022
