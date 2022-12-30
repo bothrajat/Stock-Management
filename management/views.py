@@ -315,8 +315,7 @@ def stock_movement(request):
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Factories = Jobworker.objects.filter(Role='factory')
-
+    Factories = Jobworker.objects.filter(Role='Factory')
     
     context = {
         "Colours": Colours,
