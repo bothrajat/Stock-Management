@@ -324,7 +324,7 @@ def production_input(request):
     if request.method == "POST":
         quality = request.POST.get("Quality")
         colour = request.POST.get("Colour")
-        factory = Jobworker.objects.get(Name=request.POST.get("Factory"))
+        factory = Jobworker.objects.get(WorkerName=request.POST.get("Factory"))
         Quantity = int(request.POST.get("Quantity", 0))
         try:
             stocks = FactoryStock.objects.get(
