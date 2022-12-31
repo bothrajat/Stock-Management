@@ -280,6 +280,27 @@ def stock_movement(request):
         data["totype"] = request.POST.get("totype")
         data["toName"] = request.POST.get("toName")
         return data
+    
+    def getStockTable(challan):
+        if challan.FromName.Role=="Office":
+            From = OfficeStock.objects.filter(Office=challan.FromName,Quality=challan.Quality)
+        elif challan.FromName.Role=="Dyer":
+            From = DyeingStock.objects.filter(Dyer=challan.FromName,Quality=challan.Quality)
+        elif challan.FromName.Role=="Finisher":
+            From = FinishingStock.objects.filter(Finisher=challan.FromName,Quality=challan.Quality)
+        elif challan.FromName.Role=="Factory":
+            From = FactoryStock.objects.filter(Factory=challan.FromName,Quality=challan.Quality)
+
+        if challan.ToName.Role=="Office":
+            To = OfficeStock.objects.filter(Office=challan.ToName,Quality=challan.Quality)
+        elif challan.ToName.Role=="Dyer":
+            To = DyeingStock.objects.filter(Dyer=challan.ToName,Quality=challan.Quality)
+        elif challan.ToName.Role=="Finisher":
+            To = FinishingStock.objects.filter(Finisher=challan.ToName,Quality=challan.Quality)
+        elif challan.ToName.Role=="Factory":
+            To = FactoryStock.objects.filter(Factory=challan.ToName,Quality=challan.Quality)
+        
+        return From, To
 
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
@@ -358,7 +379,16 @@ def stock_movement(request):
             StockList = ast.literal_eval(request.POST.get("StockList"))
             try:
                 challan = Challan.objects.get(ChallanNo=data["ChallanNo"])
-                Movement.objects.filter(Challan=challan).delete()
+                From, To = getStockTable(challan)
+                MovementList = Movement.objects.filter(Challan=challan)
+                for movement in MovementList:
+                    changeFrom = From.get(Colour=movement.Colour)
+                    changeFrom.Quantity+= movement.Quantity
+                    changeTo = To.get(Colour=movement.Colour)
+                    changeTo.Quantity-= movement.Quantity
+                    changeTo.save()
+                    changeFrom.save()
+                MovementList.delete()
             except:
                 challan=Challan()
                 challan.ChallanNo=data["ChallanNo"]
@@ -366,11 +396,18 @@ def stock_movement(request):
                 challan.ToName=Jobworker.objects.get(WorkerName=data["toName"])
                 challan.Quality=Quality.objects.get(Quality=data["Quality"])
                 challan.save()
+
             for key,value in StockList.items():
                 movement=Movement()
                 movement.Challan=challan
                 movement.Colour=Colour.objects.get(Colour=value["Colour"])
-                movement.Quantity=value["Quantity"]
+                movement.Quantity= value["Quantity"]
+                changeFrom = From.get(Colour=movement.Colour)
+                changeFrom.Quantity-= movement.Quantity
+                changeTo = To.get(Colour=movement.Colour)
+                changeTo.Quantity+= movement.Quantity
+                changeTo.save()
+                changeFrom.save()
                 movement.save()
 
 
