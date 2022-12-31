@@ -38,7 +38,7 @@
                         <input type="number" class="form-control" name="challan">
                     </div>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 50px;">From</label>
-                        <select class="form-select" id="options_from" aria-label="Default select example" required style="margin-right: 50px;" name="fromtype">
+                        <select class="form-select" id="options_from" aria-label="Default select example"  style="margin-right: 50px;" name="fromtype">
                             <option value="" selected disabled>
                                 Select Type
                             </option>
@@ -57,7 +57,7 @@
                             <label for="from">Name:</label>
                         </div>
                         <div class="col-4">
-                            <select class="form-select" id="choices_from" aria-label="Default select example" required style="margin-right: 50px;" name="fromName">
+                            <select class="form-select" id="choices_from" aria-label="Default select example"  style="margin-right: 50px;" name="fromName">
                                 <option value="" selected disabled>Select Name</option>
                             </select>
                         
@@ -68,7 +68,7 @@
                         <input type="submit" value="SEARCH" class="btn btn-outline-secondary" name="SEARCH" onclick="search()"/>
                     </div>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 70px;">To</label>
-                        <select class="form-select" id="options_to" aria-label="Default select example" required style="margin-right:50px" name="totype">
+                        <select class="form-select" id="options_to" aria-label="Default select example" style="margin-right:50px" name="totype">
                             <option value="" selected disabled>Select Type</option>
                             <option value="Factory">Factory</option>
                             <option value="Dyeing">
@@ -85,7 +85,7 @@
                             <label for="from">Name:</label>
                         </div>
                         <div class="col-4">
-                            <select class="form-select" id="choices_to" aria-label="Default select example" required style="margin-right: 50px;" name="toName">
+                            <select class="form-select" id="choices_to" aria-label="Default select example" style="margin-right: 50px;" name="toName">
                                 <option value="" selected disabled>Select Name</option>
                             </select>
                         
@@ -97,7 +97,7 @@
                     <div class="row_wrap">
                         <div class="putonleft">
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 75px;">Quality</label>
-                            <select class="form-select" aria-label="Default select example" required style="margin-left: 68px;" name="Quality" id="qual">
+                            <select class="form-select" aria-label="Default select example" style="margin-left: 68px;" name="Quality" id="qual">
                                 <option value="" selected disabled>Select Quality</option>
                                 {% for Quality in Qualities %}
                                 <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
@@ -109,7 +109,7 @@
                     <div class="row_wrap">
                         <div class="putonleft">
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 76px;">Colour</label>
-                            <select class="form-select" aria-label="Default select example" required style="margin-left: 69px;" name="Colour">
+                            <select class="form-select" aria-label="Default select example" style="margin-left: 69px;" name="Colour">
                                 <option value="" selected disabled>Select Colour</option>
                                 {% for Colour in Colours %}
                                 <option value="{{ Colour.Colour }}">{{ Colour.Colour }}</option>
@@ -122,7 +122,7 @@
                         <div class="putonleft">
                             <label for="quantity">Quantity</label>
                             <div class="col-sm-7">
-                                <input type="number" id="quantity" min="1" class="form-control" required placeholder="Quantity" style="margin-left: 55px;" name="Quantity" />
+                                <input type="number" id="quantity" min="1" class="form-control" placeholder="Quantity" style="margin-left: 55px;" name="Quantity" />
                             </div>
                         </div>
                         <div class="putonright"></div>

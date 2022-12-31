@@ -278,6 +278,15 @@ def stock_movement(request):
         "Offices": json.dumps([office.WorkerName for office in Offices]),
     }
     if request.method == "POST":
+        if request.POST.get("SEARCH"):
+            challanNo = int(request.POST.get("challan"))
+            StockList = Movement.objects.filter(Challan = Challan.objects.get(ChallanNo=challanNo))
+            return render(
+                request,
+                "stock_movement.html",
+                context={**context, "StockList": StockList},
+            )
+
         if request.POST.get("SAVE"):
             data = {}
             data["Quality"] = request.POST.get("Quality")
