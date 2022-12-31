@@ -396,7 +396,7 @@ def stock_movement(request):
                 challan.ToName=Jobworker.objects.get(WorkerName=data["toName"])
                 challan.Quality=Quality.objects.get(Quality=data["Quality"])
                 challan.save()
-
+            From,To=getStockTable(challan)
             for key,value in StockList.items():
                 movement=Movement()
                 movement.Challan=challan
