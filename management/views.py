@@ -116,7 +116,7 @@ def stock_view(request):
     DyeStock = DyeingStock.objects.all()
     Orders = OrderList.objects.all()
     FinStock = FinishingStock.objects.all()
-    
+
     return render(
         request,
         "stock_view.html",
@@ -280,7 +280,9 @@ def stock_movement(request):
     if request.method == "POST":
         if request.POST.get("SEARCH"):
             challanNo = int(request.POST.get("challan"))
-            StockList = Movement.objects.filter(Challan = Challan.objects.get(ChallanNo=challanNo))
+            StockList = Movement.objects.filter(
+                Challan=Challan.objects.get(ChallanNo=challanNo)
+            )
             return render(
                 request,
                 "stock_movement.html",
@@ -289,12 +291,15 @@ def stock_movement(request):
 
         if request.POST.get("SAVE"):
             data = {}
+            data["ChallanNo"] = request.POST.get("challan")
+            data["colour"] = request.POST.get("Colour")
+            data["Quantity"] = int(request.POST.get("Quantity"))
             data["Quality"] = request.POST.get("Quality")
-            data["Colour"] = request.POST.get("Colour")
-            data["Quantity"] = request.POST.get("Quantity")
+            data["fromtype"] = request.POST.get("fromtype")
+            data["fromName"] = request.POST.get("fromName")
+            data["totype"] = request.POST.get("totype")
+            data["toName"] = request.POST.get("toName")
             StockList = request.POST.get("StockList")
-            # print(data)
-            # print(StockList)
             ID = request.POST.get("ID")
             if StockList and StockList != "{}":
                 StockList = ast.literal_eval(StockList)
@@ -306,26 +311,34 @@ def stock_movement(request):
                 StockList = {}
                 ID = 1
             StockList[ID] = {
+                "Colour": data["colour"],
                 "Quantity": data["Quantity"],
-                "Colour": data["Colour"],
-                "Quality": data["Quality"],
             }
-            # print(StockList)
 
             return render(
                 request,
                 "stock_movement.html",
-                context={**context, "StockList": StockList},
+                context={
+                    **context,
+                    **data,
+                    "StockList": StockList,
+                },
             )
 
-    return render(request, "stock_movement.html", context=context)
+    return render(
+        request,
+        "stock_movement.html",
+        context={
+            **context,
+        },
+    )
 
 
 def production_input(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Factories = Jobworker.objects.filter(Role='Factory')
-    
+    Factories = Jobworker.objects.filter(Role="Factory")
+
     context = {
         "Colours": Colours,
         "Qualities": Qualities,
@@ -362,7 +375,7 @@ def production_input(request):
 
 def edit_order(request):
     Colours = Colour.objects.all()
-    context={
+    context = {
         "Colours": Colours,
     }
     if request.method == "POST":
@@ -371,45 +384,45 @@ def edit_order(request):
         context["SerialNo"] = sNo
         if request.POST.get("search"):
             data["OrderList"] = {}
-            for index,number in enumerate(OrderList.objects.filter(SerialNo=sNo)):
+            for index, number in enumerate(OrderList.objects.filter(SerialNo=sNo)):
                 # print(index, number)
-                data["OrderList"][index+1]={
-                "Colour": number.Colour.Colour,
-                "Quantity": number.OrderedQuantity,
-            }
+                data["OrderList"][index + 1] = {
+                    "Colour": number.Colour.Colour,
+                    "Quantity": number.OrderedQuantity,
+                }
             return render(
-            request,
-            "edit_order.html",
-            context={
-                **context,
-                **data,
-            },
-        )
-        
+                request,
+                "edit_order.html",
+                context={
+                    **context,
+                    **data,
+                },
+            )
+
         if request.POST.get("save"):
             data["OrderList"][data["ID"]] = {
                 "Colour": data["Colour"],
                 "Quantity": data["Quantity"],
             }
             return render(
-            request,
-            "edit_order.html",
-            context={
-                **context,
-                **data,
-            },
-        )
+                request,
+                "edit_order.html",
+                context={
+                    **context,
+                    **data,
+                },
+            )
 
         elif request.POST.get("remove"):
             del data["OrderList"][data["ID"]]
             return render(
-            request,
-            "edit_order.html",
-            context={
-                **context,
-                **data,
-            },
-        )
+                request,
+                "edit_order.html",
+                context={
+                    **context,
+                    **data,
+                },
+            )
 
         elif request.POST.get("submit"):
             try:
@@ -428,7 +441,4 @@ def edit_order(request):
             except:
                 print("Error OCCURREDD")
 
-    return render(
-        request,
-        "edit_order.html"
-    )   
+    return render(request, "edit_order.html")

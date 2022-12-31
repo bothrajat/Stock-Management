@@ -38,7 +38,7 @@
                         <input type="number" class="form-control" name="challan">
                     </div>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 50px;">From</label>
-                        <select class="form-select" id="options_from" aria-label="Default select example"  style="margin-right: 50px;" name="fromtype">
+                        <select class="form-select" id="options_from" aria-label="Default select example"  style="margin-right: 50px;">
                             <option value="" selected disabled>
                                 Select Type
                             </option>
@@ -57,7 +57,7 @@
                             <label for="from">Name:</label>
                         </div>
                         <div class="col-4">
-                            <select class="form-select" id="choices_from" aria-label="Default select example"  style="margin-right: 50px;" name="fromName">
+                            <select class="form-select" id="choices_from" aria-label="Default select example"  style="margin-right: 50px;">
                                 <option value="" selected disabled>Select Name</option>
                             </select>
                         
@@ -68,9 +68,11 @@
                         <input type="submit" value="SEARCH" class="btn btn-outline-secondary" name="SEARCH" onclick="search()"/>
                     </div>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 70px;">To</label>
-                        <select class="form-select" id="options_to" aria-label="Default select example" style="margin-right:50px" name="totype">
+                        <select class="form-select" id="options_to" aria-label="Default select example" style="margin-right:50px">
                             <option value="" selected disabled>Select Type</option>
-                            <option value="Factory">Factory</option>
+                            <option value="Factory">
+                                Factory
+                            </option>
                             <option value="Dyeing">
                                 Dyeing
                             </option>
@@ -85,10 +87,9 @@
                             <label for="from">Name:</label>
                         </div>
                         <div class="col-4">
-                            <select class="form-select" id="choices_to" aria-label="Default select example" style="margin-right: 50px;" name="toName">
+                            <select class="form-select" id="choices_to" aria-label="Default select example" style="margin-right: 50px;">
                                 <option value="" selected disabled>Select Name</option>
                             </select>
-                        
                     </div>
                 </div>
             </div>
@@ -97,7 +98,7 @@
                     <div class="row_wrap">
                         <div class="putonleft">
                             <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 75px;">Quality</label>
-                            <select class="form-select" aria-label="Default select example" style="margin-left: 68px;" name="Quality" id="qual">
+                            <select class="form-select" aria-label="Default select example" style="margin-left: 68px;" id="qual">
                                 <option value="" selected disabled>Select Quality</option>
                                 {% for Quality in Qualities %}
                                 <option value="{{ Quality.Quality }}">{{ Quality.Quality }}</option>
@@ -134,7 +135,6 @@
                         <thead>
                             <tr>
                                 <th scope="col">Selection</th>
-                                <th scope="col">Quality</th>
                                 <th scope="col">Colour</th>
                                 <th scope="col">Quantity</th>
                             </tr>
@@ -143,7 +143,6 @@
                             {% for key,Stock in StockList.items %}
                             <tr>
                                 <td><input type="radio" name="radio" value="{{key}}" onclick="getID();" class="form-check-input" /></td>
-                                <td>{{Stock.Quality}}</td>
                                 <td>{{Stock.Colour}}</td>
                                 <td>{{Stock.Quantity}}</td>
                             </tr>
@@ -155,7 +154,7 @@
             </div>
             <div class="row_wrap">
                 <div class="row_">
-                    <input type="submit" value="SAVE" class="btn btn-outline-secondary" name="SAVE" onclick="saved()"/>
+                    <input type="submit" value="SAVE" class="btn btn-outline-secondary" name="SAVE"/>
                 </div>
                 <div class="row_">
                     <input type="submit" value="REMOVE" class="btn btn-outline-secondary" />
@@ -169,9 +168,15 @@
             </div>
             <input type="hidden" value="{{StockList}}" name="StockList"/>
             <input type="hidden" value="" name="ID"/>
+            <input type="hidden" value="{{fromtype}}" id="fromtype" name="fromtype"/>
+            <input type="hidden" value="{{fromName}}" id="fromName" name="fromName"/>
+            <input type="hidden" value="{{totype}}" id="totype" name="totype"/>
+            <input type="hidden" value="{{toName}}" id="toName" name="toName"/>
+            <input type="hidden" value="{{Quality}}" id="Quality" name="Quality"/>
         </form>
     </body>
     <script>
+
         {% comment %} $(document).ready(function () {
             $("select").selectize({
                 sortField: "text",
@@ -194,7 +199,7 @@
         $("#options_from").on("change", function () {
             // Set selected option as variable
             var selectValue = $(this).val();
-
+            document.getElementById("fromtype").value=selectValue;
             // Empty the target field
             $("#choices_from").empty();
             $("#choices_from").append("<option value='' selected disabled>Select Name</option>");
@@ -209,6 +214,7 @@
         $("#options_to").on("change", function () {
             // Set selected option as variable
             var selectValue = $(this).val();
+            document.getElementById("totype").value=selectValue;
 
             // Empty the target field
             $("#choices_to").empty();
@@ -220,38 +226,57 @@
                 $("#choices_to").append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
             }
         });
-        var toname;
-        var totype;
-        var fromname;
-        var fromtype;
-        var quality;
 
-        function saved(){
-            fromtype = document.getElementById("options_from").value;
-            totype = document.getElementById("options_to").value;
-            toname = document.getElementById("choices_to").value;
-            fromname = document.getElementById("choices_from").value;
-            quality = document.getElementById("qual").value;
-            document.getElementById("options_from").value=fromtype;
-            document.getElementById("options_to").value=totype;
-            document.getElementById("choices_to").value=toname;
-            document.getElementById("choices_from").value=fromname;
-            document.getElementById("qual").value = quality;
+        $("#choices_from").on("change", function () {
+            // Set selected option as variable
+            var selectValue = $(this).val();
+            document.getElementById("fromName").value=selectValue;
+        });
 
-        }
+        $("#choices_to").on("change", function () {
+            // Set selected option as variable
+            var selectValue = $(this).val();
+            document.getElementById("toName").value=selectValue;
+        });
 
-        if("{{StockList}}"){
-            document.getElementById("options_from").setAttribute("disabled","");
-            document.getElementById("options_to").setAttribute("disabled","");
-            document.getElementById("choices_to").setAttribute("disabled","");
-            document.getElementById("choices_from").setAttribute("disabled","");
+        $("#qual").on("change", function () {
+            // Set selected option as variable
+            var selectValue = $(this).val();
+            document.getElementById("Quality").value=selectValue;
+        });
+
+        if ("{{StockList}}"){
+            document.getElementById("options_from").value="{{fromtype}}";
+            document.getElementById("options_to").value="{{totype}}";
+            document.getElementById("Quality").value=decodeHtml("{{Quality}}");
+            document.getElementById("qual").value=decodeHtml("{{Quality}}");
+            t = document.getElementById("choices_from");
+            var x = document.createElement("input");
+            x.setAttribute("type", "text");
+            x.setAttribute("class","form-control");
+            x.setAttribute("id","choices_from");
+            t.parentElement.appendChild(x);
+            t.remove();
+            a=document.getElementById("choices_to");
+            var b = document.createElement("input");
+            b.setAttribute("type", "text");
+            b.setAttribute("class","form-control");
+            b.setAttribute("id","choices_to");
+            a.parentElement.appendChild(b);
+            a.remove();
+            document.getElementById("choices_from").value="{{fromName}}";
+            document.getElementById("choices_to").value="{{toName}}";
             document.getElementById("qual").setAttribute("disabled","");
-            document.getElementById("options_from").value=fromtype;
-            document.getElementById("options_to").value=totype;
-            document.getElementById("qual").value=quality; 
-            
+            document.getElementById("choices_to").setAttribute("disabled","");
+            document.getElementById("options_to").setAttribute("disabled","");
+            document.getElementById("choices_from").setAttribute("disabled","");
+            document.getElementById("options_from").setAttribute("disabled","");
         }
-        
-        
+
+        function decodeHtml(html) {
+            var txt = document.createElement("textarea");
+            txt.innerHTML = html;
+            return txt.value;
+        }
     </script>
 </html>
