@@ -41,5 +41,4 @@ class Command(BaseCommand):
         for role, name in zip(df5.Role, df5.Name):
             model  = Jobworker(Role = role, WorkerName = name)
             model.save()
-            
-        
+
