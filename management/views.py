@@ -116,6 +116,7 @@ def stock_view(request):
     DyeStock = DyeingStock.objects.all()
     Orders = OrderList.objects.all()
     FinStock = FinishingStock.objects.all()
+    Moves = Movement.objects.all()
 
     return render(
         request,
@@ -126,6 +127,7 @@ def stock_view(request):
             "DyeStock": DyeStock,
             "Orders": Orders,
             "FinStock": FinStock,
+            "Moves": Moves
         },
     )
 

@@ -170,3 +170,7 @@ form {
   box-shadow: 19.52px 19.52px 34px #13723D, -19.52px -19.52px 34px #27EC7F;
 }
 
+.body{
+  height: 400vh; 
+}
+

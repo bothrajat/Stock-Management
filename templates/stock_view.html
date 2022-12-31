@@ -59,6 +59,39 @@
                 </table>
             </div>
             <div class="row_wrap">
+                <label style="font-size: large; margin-left:-73vw"><b>Challan Data</b></label>
+            </div>
+            <div class="row_wrap">
+                <table class="table table-striped table-dark table-hover table-bordered" style="align-self:left; width:100%; ">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Challan No.</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Quality</th>
+                            <th scope="col">Colour</th>
+                            <th scope="col">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for Move in Moves %}
+                        <tr>
+                            <td>
+                                <input type="radio" name="radio" value="order-{{ Order.SerialNo.id }}" onclick="getID()" class="form-check-input" />
+                            </td>
+                            <td>{{Move.Challan.ChallanNo}}</td>
+                            <td>{{Move.Challan.FromName.WorkerName}}</td>
+                            <td>{{Move.Challan.ToName.WorkerName}}</td>
+                            <td>{{Move.Challan.Quality.Quality}}</td>
+                            <td>{{Move.Colour.Colour}}</td>
+                            <td>{{Move.Quantity}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row_wrap">
                 <label style="font-size: large;margin-left:-28vw;"><b>Factory Stock</b></label>
                 <label style="font-size: large;margin-left:37vw;"><b>Office Stock</b></label>
             </div>
