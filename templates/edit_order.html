@@ -150,9 +150,9 @@
             eval("var OrderList=" + document.getElementById("OrderList").value);
             if ("{{CustomerName}}"){
                 document.getElementById("CustomerName").value="{{CustomerName}}";
-                document.getElementById("Quality").value="{{Quality}}";
+                document.getElementById("Quality").value=decodeHtml("{{Quality}}");
                 document.getElementsByName("CustomerName")[0].value="{{CustomerName}}";
-                document.getElementsByName("Quality")[0].value="{{Quality}}";
+                document.getElementsByName("Quality")[0].value=decodeHtml("{{Quality}}");
                 document.getElementById("CustomerName").setAttribute("disabled","");
                 document.getElementById("Quality").setAttribute("disabled","");
                 document.getElementById("dateoforder").setAttribute("readonly","");
@@ -213,8 +213,11 @@
                 document.getElementById("Quantity").value = "";
                 document.getElementById("ID").value = "";
             }
-            if("{{ OrderList }}"){
 
+            function decodeHtml(html) {
+                var txt = document.createElement("textarea");
+                txt.innerHTML = html;
+                return txt.value;
             }
         </script>
     </body>
