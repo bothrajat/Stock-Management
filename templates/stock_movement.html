@@ -35,7 +35,7 @@
                 <div class="row_wrap" style="margin-top: 15px; margin-bottom: 15px;">
                     <div class="col-2">
                         <label class="my-1 mr-2">Challan Number</label>
-                        <input type="number" class="form-control" name="challan">
+                        <input type="number" min="1" value="{{ChallanNo}}" class="form-control" name="challan">
                     </div>
                         <label class="my-1 mr-2" for="inlineFormCustomSelectPref" style="margin-right: 50px;">From</label>
                         <select class="form-select" id="options_from" aria-label="Default select example"  style="margin-right: 50px;">
@@ -157,10 +157,10 @@
                     <input type="submit" value="SAVE" class="btn btn-outline-secondary" name="SAVE"/>
                 </div>
                 <div class="row_">
-                    <input type="submit" value="REMOVE" class="btn btn-outline-secondary" />
+                    <input type="submit" value="REMOVE" class="btn btn-outline-secondary" name="REMOVE"/>
                 </div>
                 <div class="row_">
-                    <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" />
+                    <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="Submit"/>
                 </div>
                 <div class="row_">
                     <input type="reset" value="CLEAR" class="btn btn-outline-secondary" />
@@ -184,7 +184,10 @@
         }); {% endcomment %}
         
         function getID() {
-            document.querySelector('input[name="ID"]').value = document.querySelector('input[type="radio"]:checked').value;
+            t = document.querySelector('input[type="radio"]:checked').value;
+            document.querySelector('input[name="ID"]').value = t;
+            document.getElementsByName("Colour")[0].value=Stocklist[parseInt(t)]["Colour"];
+            document.getElementsByName("Quantity")[0].value=Stocklist[parseInt(t)]["Quantity"];
         }
 
         // Map your choices to your option value
@@ -203,19 +206,19 @@
             // Empty the target field
             $("#choices_from").empty();
             $("#choices_from").append("<option value='' selected disabled>Select Name</option>");
-
+            
             // For each chocie in the selected option
             for (i = 0; i < lookup[selectValue].length; i++) {
                 // Output choice in the target field
                 $("#choices_from").append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
             }
         });
-
+        
         $("#options_to").on("change", function () {
             // Set selected option as variable
             var selectValue = $(this).val();
             document.getElementById("totype").value=selectValue;
-
+            
             // Empty the target field
             $("#choices_to").empty();
             $("#choices_to").append("<option value='' selected disabled>Select Name</option>");
@@ -226,26 +229,27 @@
                 $("#choices_to").append("<option value='" + lookup[selectValue][i] + "'>" + lookup[selectValue][i] + "</option>");
             }
         });
-
+        
         $("#choices_from").on("change", function () {
             // Set selected option as variable
             var selectValue = $(this).val();
             document.getElementById("fromName").value=selectValue;
         });
-
+        
         $("#choices_to").on("change", function () {
             // Set selected option as variable
             var selectValue = $(this).val();
             document.getElementById("toName").value=selectValue;
         });
-
+        
         $("#qual").on("change", function () {
             // Set selected option as variable
             var selectValue = $(this).val();
             document.getElementById("Quality").value=selectValue;
         });
-
+        
         if ("{{StockList}}"){
+            eval("var Stocklist=" + document.getElementsByName("StockList")[0].value);
             document.getElementById("options_from").value="{{fromtype}}";
             document.getElementById("options_to").value="{{totype}}";
             document.getElementById("Quality").value=decodeHtml("{{Quality}}");
@@ -266,6 +270,7 @@
             a.remove();
             document.getElementById("choices_from").value="{{fromName}}";
             document.getElementById("choices_to").value="{{toName}}";
+            document.getElementsByName("challan")[0].setAttribute("readonly","");
             document.getElementById("qual").setAttribute("disabled","");
             document.getElementById("choices_to").setAttribute("disabled","");
             document.getElementById("options_to").setAttribute("disabled","");
