@@ -263,6 +263,24 @@ def consumption_record(request):
 
 
 def stock_movement(request):
+
+    def data(request):
+        data = {}
+        data["ChallanNo"] = request.POST.get("challan")
+        data["colour"] = request.POST.get("Colour")
+        Quantity = request.POST.get("Quantity")
+        if Quantity:
+            Quantity = int(Quantity)
+        else:
+            Quantity = 0
+        data["Quantity"] = Quantity
+        data["Quality"] = request.POST.get("Quality")
+        data["fromtype"] = request.POST.get("fromtype")
+        data["fromName"] = request.POST.get("fromName")
+        data["totype"] = request.POST.get("totype")
+        data["toName"] = request.POST.get("toName")
+        return data
+
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
     Dyers = Jobworker.objects.filter(Role="Dyer")
@@ -290,15 +308,7 @@ def stock_movement(request):
             )
 
         if request.POST.get("SAVE"):
-            data = {}
-            data["ChallanNo"] = request.POST.get("challan")
-            data["colour"] = request.POST.get("Colour")
-            data["Quantity"] = int(request.POST.get("Quantity"))
-            data["Quality"] = request.POST.get("Quality")
-            data["fromtype"] = request.POST.get("fromtype")
-            data["fromName"] = request.POST.get("fromName")
-            data["totype"] = request.POST.get("totype")
-            data["toName"] = request.POST.get("toName")
+            data = data(request)
             StockList = request.POST.get("StockList")
             ID = request.POST.get("ID")
             if StockList and StockList != "{}":
@@ -324,6 +334,45 @@ def stock_movement(request):
                     "StockList": StockList,
                 },
             )
+        
+        if request.POST.get("REMOVE"):
+            data=data(request)
+            StockList = ast.literal_eval(request.POST.get("StockList"))
+            ID = int(request.POST.get("ID"))
+            del StockList[ID]
+            if not StockList:
+                return redirect("stock-movement")
+
+            return render(
+                request,
+                "stock_movement.html",
+                context={
+                    **context,
+                    **data,
+                    "StockList": StockList,
+                },
+            )
+
+        if request.POST.get("Submit"):
+            data=data(request)
+            StockList = ast.literal_eval(request.POST.get("StockList"))
+            try:
+                challan = Challan.objects.get(ChallanNo=data["ChallanNo"])
+                Movement.objects.filter(Challan=challan).delete()
+            except:
+                challan=Challan()
+                challan.ChallanNo=data["ChallanNo"]
+                challan.FromName=Jobworker.objects.get(WorkerName=data["fromName"])
+                challan.ToName=Jobworker.objects.get(WorkerName=data["toName"])
+                challan.Quality=Quality.objects.get(Quality=data["Quality"])
+                challan.save()
+            for key,value in StockList.items():
+                movement=Movement()
+                movement.Challan=challan
+                movement.Colour=Colour.objects.get(Colour=value["Colour"])
+                movement.Quantity=value["Quantity"]
+                movement.save()
+
 
     return render(
         request,
