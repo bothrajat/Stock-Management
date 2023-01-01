@@ -42,3 +42,22 @@ class Command(BaseCommand):
             model  = Jobworker(Role = role, WorkerName = name)
             model.save()
 
+        df7 = pd.read_csv('finstock.csv')
+        for name, quality, colour, quantity in zip(df7.Finisher, df7.Quality, df7.Colour, df7.Quantity):
+            model = FinishingStock(Finisher = Jobworker.objects.get(WorkerName = name), Quality = quality, Colour = colour, Quantity = quantity)
+            model.save()
+
+        df6 = pd.read_csv('factstock.csv')
+        for name, quality, colour, quantity in zip(df6.Finisher, df6.Quality, df6.Colour, df6.Quantity):
+            model = FactoryStock(Factory = Jobworker.objects.get(WorkerName = name), Quality = quality, Colour = colour, Quantity = quantity)
+            model.save()
+
+        df8 = pd.read_csv('dyestock.csv')
+        for name, quality, colour, quantity in zip(df8.Dyer, df8.Quality, df8.Colour, df8.Quantity):
+            model = DyeingStock(Dyer = Jobworker.objects.get(WorkerName = name), Quality = quality, Colour = colour, Quantity = quantity)
+            model.save()
+
+        df9 = pd.read_csv('offtock.csv')
+        for name, quality, colour, quantity in zip(df9.Finisher, df9.Quality, df9.Colour, df9.Quantity):
+            model = OfficeStock(Office = Jobworker.objects.get(WorkerName = name), Quality = quality, Colour = colour, Quantity = quantity)
+            model.save()
