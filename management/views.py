@@ -504,7 +504,8 @@ def edit_order(request):
                 # print(index, number)
                 data["OrderList"][index + 1] = {
                     "Colour": number.Colour.Colour,
-                    "Quantity": number.OrderedQuantity,
+                    "OrderedQuantity": number.OrderedQuantity,
+                    "BalanceQuantity":number.BalanceQuantity
                 }
             return render(
                 request,
@@ -516,9 +517,19 @@ def edit_order(request):
             )
 
         if request.POST.get("save"):
-            data["OrderList"][data["ID"]] = {
+            print(data["OrderList"])
+            if not data["OrderList"].get(data["ID"],0): 
+                data["OrderList"][data["ID"]]={
+                    # "OrderedQuantity":data["Quantity"],
+                    # "BalanceQuantity":data["Quantity"]
+                    "OrderedQuantity":0,
+                    "BalanceQuantity":0
+            }
+            temp=data["OrderList"][data["ID"]]
+            data["OrderList"][data["ID"]]= {
                 "Colour": data["Colour"],
-                "Quantity": data["Quantity"],
+                "OrderedQuantity": data["Quantity"],
+                "BalanceQuantity": temp["BalanceQuantity"]-temp["OrderedQuantity"]+data["Quantity"]
             }
             return render(
                 request,
@@ -550,8 +561,8 @@ def edit_order(request):
                         OrderList_obj.Colour = Colour.objects.get(
                             Colour=value["Colour"]
                         )
-                        OrderList_obj.OrderedQuantity = value["Quantity"]
-                        OrderList_obj.BalanceQuantity = value["Quantity"]
+                        OrderList_obj.OrderedQuantity = value["OrderedQuantity"]
+                        OrderList_obj.BalanceQuantity = value["BalanceQuantity"]
                         OrderList_obj.save()
                     return redirect("edit-order")
             except:
