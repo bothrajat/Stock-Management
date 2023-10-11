@@ -1,0 +1,176 @@
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+form {
+  height: 80vh;
+  display: grid;
+  place-items: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 50px;
+}
+
+.row_wrap {
+  width: 90vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+.row_wrap table{
+  width: 42vw;
+  margin-left: 4vw;
+  margin-right: 4vw;
+}
+
+.row_wrap>label {
+  margin-right: 10px;
+  margin-left: 20px;
+}
+
+.row_wrap select {
+  width: 250px;
+}
+
+.row_ {
+  width: 70vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6vw;
+  margin-right: 6vw;
+}
+.putonleft{
+  width: 70vw;
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  margin-left: 80px;
+  margin-right: 20px;
+}
+
+.putonright{
+  width: 70vw;
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  margin-left: 20px;
+  margin-right: 80px;
+}
+.putonleft>label {
+  margin-right: 10px;
+  margin-left: 20px;
+}
+.putonright>label {
+  margin-right: 10px;
+  margin-left: 20px;
+}
+.putonleft select {
+  width: 250px;
+}
+.putonright select {
+  width: 250px;
+}
+.dwrap {
+  display: flex;
+  flex-direction: row;
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+.dwrap>table{
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5vw;
+  margin-right: 2vw;
+}
+.dwrap>div:nth-child(1){
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.row_wrap_left {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.row_wrap_left .leftt {
+  text-align: left;
+  margin-left: -33vw;
+  font-size:large;
+}
+
+.row_wrap_left select {
+  width: 250px;
+}
+.row_wrap_right {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+  justify-content: space-evenly;
+
+}
+
+.row_wrap_right .leftt {
+  text-align: left;
+  margin-left: 2vw;
+  margin-bottom: -3vw;
+  font-size:large;
+}
+
+.row_wrap_right select {
+  width: 250px;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+.test{
+  background: linear-gradient(145deg, #18924E, #22CC6E);
+  border-radius: 67%;
+  box-shadow: 19.52px 19.52px 34px #13723D, -19.52px -19.52px 34px #27EC7F;
+}
+
+.body{
+  height: 400vh; 
+}
+
