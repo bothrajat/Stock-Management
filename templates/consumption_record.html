@@ -18,67 +18,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/management/order-booking/">Order Booking</a>
                     <a class="nav-item nav-link" href="/management/stock-view/">Stock View</a>
                     <a class="nav-item nav-link active" href="/management/consumption-record/">Consumption Record</a>
                     <a class="nav-item nav-link" href="/management/stock-movement/">Stock Movement</a>
-                    <a class="nav-item nav-link" href="/management/production-input/">Production Input</a>
-                    <a class="nav-item nav-link" href="/management/edit-order/">Edit Order</a>
 
                 </div>
             </div>
         </nav>
         <form method="POST">
             {% csrf_token %}
-            <div class="row_wrap">
-                <label for="customername" class="col-sm-1 col-form-label">Customer Name</label>
-                <select id="select-customer" class="form-select" name="customer">
-                    <option value="" disabled selected>Select Customer Name..</option>
-                    {% for Customer in Customers %}
-                    <option value="{{ Customer.CustomerName }}">{{ Customer.CustomerName }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="row_wrap">
-                <div class="form-check form-switch">
-                    <input type="checkbox" id="switc" role="switch" class="form-check-input"><label
-                        class="form-check-label" id="switch">OTHERS</label>
-                </div>
-            </div>
-            <div class="row_wrap">
-                <input type="submit" value="SEARCH" class="btn btn-outline-secondary" name="search" onclick="searchit()">
-            </div>
             <div>
-                {% if Stocks %}
-                <table class="table table-striped table-dark table-hover table-bordered" id="teb">
-                    <thead>
-                        <tr>
-                            <th scope="col">Selection</th>
-                            <th scope="col">Order No.</th>
-                            <th scope="col"> Customer Name</th>
-                            <th scope="col">Quality</th>
-                            <th scope="col">Colour</th>
-                            <th scope="col">Initial Quantity</th>
-                            <th scope="col">Balance Quantity</th>
-                            <th scope="col">Date </th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        {% for key,Stock in Stocks.items %}
-                        <tr>
-                            <td><input type="radio" class="form-check-input" onclick="putval()" value="{{ key }}" name="radio"></td>
-                            <td>{{Stock.OrderNo}}</td>
-                            <td>{{Stock.CustomerName}}</td>
-                            <td>{{Stock.Quality}}</td>
-                            <td>{{Stock.Colour}}</td>
-                            <td>{{Stock.OrderedQuantity}}</td>
-                            <td>{{Stock.BalanceQuantity}}</td>
-                            <td>{{Stock.Date}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endif %}
                 {% if Othercons%}
                 <table class="table table-striped table-dark table-hover table-bordered" id="teb">
                     <thead>
@@ -104,7 +53,7 @@
             </div>
             <div class="row_wrap">
                 <label class="my-1 mr-2" for="Quality" >Quality</label>
-                <select class="form-select" name="Quality" id="Quality" aria-label="Default select example" style="margin-right: 80px;" onclick="filtertablebyqual()">
+                <select class="form-select" name="Quality" id="Quality" aria-label="Default select example" style="margin-right: 80px;" onchange="filterTable()">
                     <option value="" disabled selected>Select Quality.</option>
                     {% for Quality in Qualities %}
                     <option value="{{ Quality.Quality }}">
@@ -113,7 +62,7 @@
                     {% endfor %}
                 </select>
                 <label class="my-1 mr-2" for="Colour" >Colour</label>
-                <select class="form-select" name="Colour" id="Colour" aria-label="Default select example" style="margin-right: 80px;" onclick="filtertablebycolour()">
+                <select class="form-select" name="Colour" id="Colour" aria-label="Default select example" style="margin-right: 80px;" onchange="filterTable()">
                     <option value="" disabled selected>Select Colour.</option>
                     {% for Colour in Colours %}
                     <option value="{{ Colour.Colour }}">
@@ -133,12 +82,17 @@
                 </div>
             </div>
             <div class="row_wrap">
-                <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary" name="clear"></div>
-                <div class="row_">
-                    <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit" onclick="searchit()">
+                <label class="col-sm-1 col-form-label">Remarks</label>
+                <div class="col-sm-4">
+                <input type="text"  id="remark" class="form-control" placeholder="Remark" name="remark">
                 </div>
             </div>
-            <input hidden type="text" value="{{Stocks}}" id="StockList">
+            <div class="row_wrap">
+                <div class="row_"><input type="reset" value="CLEAR" class="btn btn-outline-secondary" name="clear"></div>
+                <div class="row_">
+                    <input type="submit" value="SUBMIT" class="btn btn-outline-secondary" name="submit" >
+                </div>
+            </div>
             <input hidden type="text" value="{{Othercons}}" id="OtherCon">
             <input type="hidden" id="ID" name="ID" value="" />
             <input type="hidden" name ="swit" id = "inphid" value=""/>
@@ -158,7 +112,7 @@
                             .indexOf(value) > -1)
                         });
                     });
-        }); 
+        });
         var name;
         if(document.getElementById("StockList").value && document.getElementById("StockList").value!="{}"){ 
             document.getElementById("select-customer").value = name;
@@ -169,24 +123,6 @@
             document.getElementById("switc").checked = true;
         } 
 
-        function searchit(){
-            {% comment %} document.getElementById("switch").setAttribute("disabled", ""); {% endcomment %}
-            name = document.getElementById("select-customer").value;
-            if(document.getElementById("switc").checked){
-                document.getElementById("inphid").value = 1;
-            }
-            else{
-                document.getElementById("inphid").value = 0;
-            }
-        }
-        function putval(){
-            var temp = parseInt(document.querySelector('input[type="radio"]:checked').value);
-            eval("var Stocklist="+document.getElementById("StockList").value);
-            document.getElementById("balanceqty").value=Stocklist[temp]["BalanceQuantity"];
-            document.getElementById("consumedqty").value="";
-            document.getElementById("consumedqty").setAttribute("max",Stocklist[temp]["BalanceQuantity"]);
-            document.querySelector('input[name="ID"]').value = temp;
-        }
 
         function putvall(){
             var temp = parseInt(document.querySelector('input[type="radio"]:checked').value);
@@ -195,44 +131,26 @@
             document.getElementById("consumedqty").value="";
             document.querySelector('input[name="ID"]').value = temp;
         }
-        
-        
-        function filtertablebyqual(){
-            var table = document.getElementById("teb");
-            var qual = document.getElementById("Quality").value;
-            var tr,td,found,i;
-            tr = table.getElementsByTagName("tr");
-            for(i=1;i<tr.length; i++){
-                td = tr[i].getElementsByTagName("td");
-                if(td[3].innerHTML == qual){
-                    found = true;
-                }
-                if(found){
-                    tr[i].style.display="";
-                    found = false;
-                }else{
-                    tr[i].style.display="none";
-                }
-            }
-        }
 
-        function filtertablebycolour(){
-            var table = document.getElementById("teb");
-            var colo = document.getElementById("Colour").value;
-            var tr, td, found,i;
-            tr = table.getElementsByTagName("tr");
-            for(i=1;i<tr.length; i++){
-                td = tr[i].getElementsByTagName("td");
-                if(td[4].innerHTML == colo ){
-                    found = true;
-                }
-                if(found){
-                    tr[i].style.display="";
-                    found = false;
-                }else{
-                    tr[i].style.display="none";
-                }
-            }
+
+        function filterTable() {
+    var table = document.getElementById("teb");
+    var qual = document.getElementById("Quality").value;
+    var colo = document.getElementById("Colour").value;
+    var tr = table.getElementsByTagName("tr");
+
+    for (var i = 1; i < tr.length; i++) {
+        var tdQuality = tr[i].getElementsByTagName("td")[1]; // Quality column
+        var tdColour = tr[i].getElementsByTagName("td")[2]; // Colour column
+
+        if (tdQuality && tdColour) {
+            var matchQuality = qual === "" || tdQuality.innerText.trim() === qual;
+            var matchColour = colo === "" || tdColour.innerText.trim() === colo;
+
+            // Show row only if both filters match
+            tr[i].style.display = matchQuality && matchColour ? "" : "none";
         }
+    }
+}
     </script>
 </html>

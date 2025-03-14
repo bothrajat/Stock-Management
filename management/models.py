@@ -1,8 +1,6 @@
 from django.db import models
 
 # Create your models here.
-class Customer(models.Model):
-    CustomerName = models.CharField(max_length=256)
 
 
 class Quality(models.Model):
@@ -12,26 +10,6 @@ class Quality(models.Model):
 class Colour(models.Model):
     Colour = models.CharField(max_length=32, primary_key=True)
 
-
-class Order(models.Model):
-    OrderNo = models.CharField(unique=True, max_length=256)
-
-
-class SerialNo(models.Model):
-    Customer = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
-    Order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
-    Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
-    Date = models.DateField()
-
-    class Meta:
-        unique_together = (("Customer", "Order"),)
-
-
-class OrderList(models.Model):
-    SerialNo = models.ForeignKey(SerialNo, on_delete=models.CASCADE)
-    Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
-    OrderedQuantity = models.PositiveIntegerField()
-    BalanceQuantity = models.PositiveIntegerField()
 
 
 class Jobworker(models.Model):
@@ -51,34 +29,36 @@ class DyeingStock(models.Model):
     Dyer = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
-    Quantity = models.PositiveIntegerField()
+    Quantity = models.IntegerField()
 
 
 class FinishingStock(models.Model):
     Finisher = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
-    Quantity = models.PositiveIntegerField()
+    Quantity = models.IntegerField()
 
 
 class OfficeStock(models.Model):
     Office = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
-    Quantity = models.PositiveIntegerField()
+    Quantity = models.IntegerField()
 
 
 class FactoryStock(models.Model):
     Factory = models.ForeignKey(Jobworker, on_delete=models.DO_NOTHING)
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
-    Quantity = models.PositiveIntegerField()
+    Quantity = models.IntegerField()
 
 
 class OtherConsumption(models.Model):
     Quality = models.ForeignKey(Quality, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
-    Quantity = models.PositiveIntegerField()
+    Quantity = models.IntegerField()
+    Remark = models.TextField(null=True)
+    Date = models.DateField()
 
 
 class Challan(models.Model):
@@ -95,4 +75,5 @@ class Challan(models.Model):
 class Movement(models.Model):
     Challan = models.ForeignKey(Challan, on_delete=models.DO_NOTHING)
     Colour = models.ForeignKey(Colour, on_delete=models.DO_NOTHING)
-    Quantity = models.PositiveBigIntegerField()
+    Quantity = models.BigIntegerField()
+    Date = models.DateField()

@@ -89,8 +89,12 @@ WSGI_APPLICATION = "Stock_Management.wsgi.application"
 env = environ.Env()
 environ.Env.read_env()
 DATABASES = {
-    'default': dj_database_url.parse(env("DATABASE_URL"))
+    'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
 }
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

@@ -1,13 +1,16 @@
-from django.contrib import messages
-from django.db import transaction
+import datetime
+
+from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db import transaction
 from management.models import *
 import json, ast
 
+
 # Create your views here.
 def home(request):
-    return redirect("order-booking")
+    return redirect("stock-movement")
 
 
 def collect(request):
@@ -39,84 +42,75 @@ def collect(request):
     }
 
 
-def order_booking(request):
-    Qualities = Quality.objects.all()
+def stock_view(request):
+    FactStock = FactoryStock.objects.filter(~Q(Quantity=0))
+    OffStock = OfficeStock.objects.filter(~Q(Quantity=0))
+    DyeStock = DyeingStock.objects.filter(~Q(Quantity=0))
+    FinStock = FinishingStock.objects.filter(~Q(Quantity=0))
+    Moves = Movement.objects.all()
     Colours = Colour.objects.all()
-    Customers = Customer.objects.all()
-    serialNo = SerialNo.objects.count() + 1
-    Orderlist = {}
-    context = {
-        "SerialNo": serialNo,
-        "Colours": Colours,
-        "Qualities": Qualities,
-        "Customers": Customers,
-    }
+    Qualities = Quality.objects.all()
+    OtherCons = OtherConsumption.objects.all()
+
     if request.method == "POST":
-        data = collect(request)
-
-        if request.POST.get("save"):
-            data["OrderList"][data["ID"]] = {
-                "Colour": data["Colour"],
-                "Quantity": data["Quantity"],
-            }
-
-        elif request.POST.get("remove"):
-            del data["OrderList"][data["ID"]]
-            if not data["OrderList"]:
-                return redirect("order-booking")
-
-        elif request.POST.get("submit"):
-            try:
-                with transaction.atomic():
-                    try:
-                        order = Order.objects.get(OrderNo=data["OrderNo"])
-                    except:
-                        order = Order.objects.create(OrderNo=data["OrderNo"])
-                    # print(data["CustomerName"])
-                    customer = Customer.objects.get(CustomerName=data["CustomerName"])
-                    quality = Quality.objects.get(Quality=data["Quality"])
-                    Date = data["Date"]
-                    serialNo = SerialNo.objects.create(
-                        Order=order, Customer=customer, Quality=quality, Date=Date
-                    )
-                    for key, value in data["OrderList"].items():
-                        OrderList_obj = OrderList()
-                        OrderList_obj.SerialNo = serialNo
-                        OrderList_obj.Colour = Colour.objects.get(
-                            Colour=value["Colour"]
-                        )
-                        OrderList_obj.OrderedQuantity = value["Quantity"]
-                        OrderList_obj.BalanceQuantity = value["Quantity"]
-                        OrderList_obj.save()
-                    return redirect("order-booking")
-            except:
-                print("Error OCCURREDD")
+        qual = request.POST.get("Quality")
+        colour = request.POST.get("Colour")
+        print(qual, colour)
+        if qual is not None and colour is not None:
+            FactStock = FactoryStock.objects.filter(Quality=Quality.objects.get(Quality=qual),
+                                                    Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            OffStock = OfficeStock.objects.filter(Quality=Quality.objects.get(Quality=qual),
+                                                  Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            DyeStock = DyeingStock.objects.filter(Quality=Quality.objects.get(Quality=qual),
+                                                  Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            FinStock = FinishingStock.objects.filter(Quality=Quality.objects.get(Quality=qual),
+                                                     Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            Moves = Movement.objects.filter(
+                Challan__in=Challan.objects.filter(Quality=Quality.objects.get(Quality=qual)),
+                Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            Colours = Colour.objects.all()
+            Qualities = Quality.objects.all()
+            OtherCons = OtherConsumption.objects.filter(Quality=Quality.objects.get(Quality=qual),
+                                                        Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+        elif qual is not None:
+            OffStock = OfficeStock.objects.filter(Quality=Quality.objects.get(Quality=qual)).exclude(Quantity=0)
+            DyeStock = DyeingStock.objects.filter(Quality=Quality.objects.get(Quality=qual)).exclude(Quantity=0)
+            FinStock = FinishingStock.objects.filter(Quality=Quality.objects.get(Quality=qual)).exclude(Quantity=0)
+            Moves = Movement.objects.filter(
+                Challan__in=Challan.objects.filter(Quality=Quality.objects.get(Quality=qual))).exclude(Quantity=0)
+            Colours = Colour.objects.all()
+            Qualities = Quality.objects.all()
+            OtherCons = OtherConsumption.objects.filter(Quality=Quality.objects.get(Quality=qual)).exclude(Quantity=0)
+        elif colour is not None:
+            FactStock = FactoryStock.objects.filter(
+                Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            OffStock = OfficeStock.objects.filter(
+                Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            DyeStock = DyeingStock.objects.filter(
+                Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            FinStock = FinishingStock.objects.filter(
+                Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            Moves = Movement.objects.filter(
+                Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
+            Colours = Colour.objects.all()
+            Qualities = Quality.objects.all()
+            OtherCons = OtherConsumption.objects.filter(
+                Colour=Colour.objects.get(Colour=colour)).exclude(Quantity=0)
 
         return render(
             request,
-            "order_booking.html",
+            "stock_view.html",
             context={
-                **data,
-                **context,
+                "FactStock": FactStock,
+                "OffStock": OffStock,
+                "DyeStock": DyeStock,
+                "FinStock": FinStock,
+                "Moves": Moves,
+                "Qualities": Qualities,
+                "Colours": Colours,
+                "OtherCons": OtherCons
             },
         )
-    return render(
-        request,
-        "order_booking.html",
-        context={
-            **context,
-            "OrderList": Orderlist,
-        },
-    )
-
-
-def stock_view(request):
-    FactStock = FactoryStock.objects.filter(Quantity__gte=1)
-    OffStock = OfficeStock.objects.filter(Quantity__gte=1)
-    DyeStock = DyeingStock.objects.filter(Quantity__gte=1)
-    Orders = OrderList.objects.filter(BalanceQuantity__gte=1)
-    FinStock = FinishingStock.objects.filter(Quantity__gte=1)
-    Moves = Movement.objects.all()
 
     return render(
         request,
@@ -125,9 +119,11 @@ def stock_view(request):
             "FactStock": FactStock,
             "OffStock": OffStock,
             "DyeStock": DyeStock,
-            "Orders": Orders,
             "FinStock": FinStock,
             "Moves": Moves,
+            "Qualities": Qualities,
+            "Colours": Colours,
+            "OtherCons": OtherCons
         },
     )
 
@@ -135,128 +131,70 @@ def stock_view(request):
 def consumption_record(request):
     Qualities = Quality.objects.all()
     Colours = Colour.objects.all()
-    Customers = Customer.objects.all()
-    Orders = OrderList.objects.all()
     Others = OtherConsumption.objects.all()
-    context = {"Customers": Customers, "Colours": Colours, "Qualities": Qualities}
+    OffStock = OfficeStock.objects.filter(Quantity__gte=1)
+    othercons = {}
+    for Stock in OffStock:
+        othercons[Stock.id] = {
+            "Quantity": Stock.Quantity,
+            "Colour": Stock.Colour.Colour,
+            "Quality": Stock.Quality.Quality
+        }
+    context = {"Colours": Colours, "Qualities": Qualities, "Othercons": othercons, "Stocks": othercons}
     flag = 0
     if request.method == "POST":
-        if request.POST.get("search"):
-            flag = 1
-            quality = request.POST.get("quality")
-            colour = request.POST.get("colour")
-            swit = int(request.POST.get("swit"))
-            customer = request.POST.get("customer")
-            otherscons = {}
-            stocks = {}
-            # print(swit)
-            if swit:
-                try:
-                    for number in OtherConsumption.objects.all():
-                        otherscons[number.id] = {
-                            "Quality": number.Quality.Quality,
-                            "Colour": number.Colour.Colour,
-                            "Quantity": number.Quantity,
-                        }
-                except:
-                    otherscons = None
-            else:
-                try:
+        swit = 1
+        otherscons = {}
+        for Stock in OfficeStock.objects.filter(Quantity__gte=1):
+            othercons[Stock.id] = {
+                "Quantity": Stock.Quantity,
+                "Colour": Stock.Colour.Colour,
+                "Quality": Stock.Quality.Quality
+            }
 
-                    for number in SerialNo.objects.filter(
-                        Customer=Customer.objects.get(CustomerName=customer)
-                    ):
-                        for order in OrderList.objects.filter(SerialNo=number):
-                            stocks[order.id] = {
-                                "OrderNo": order.SerialNo.Order.OrderNo,
-                                "CustomerName": order.SerialNo.Customer.CustomerName,
-                                "Quality": order.SerialNo.Quality.Quality,
-                                "Colour": order.Colour.Colour,
-                                "OrderedQuantity": order.OrderedQuantity,
-                                "BalanceQuantity": order.BalanceQuantity,
-                                "Date": str(order.SerialNo.Date),
-                            }
-                except:
-                    stocks = None
+        idee = request.POST.get("ID")
+        if idee:
+            idee = int(idee)
+        else:
+            idee = 0
+        consumedqty = int(request.POST.get("consumedqty"))
+        remark = request.POST.get("remark")
+        try:
+            with transaction.atomic():
+                cons = OfficeStock.objects.get(id=idee)
+                cons.Quantity -= consumedqty
+                cons.save()
 
-            return render(
-                request,
-                "consumption_record.html",
-                context={
-                    "Orders": Orders,
-                    "Colours": Colours,
-                    "Qualities": Qualities,
-                    "Customers": Customers,
-                    "Others": Others,
-                    "Stocks": stocks,
-                    "Othercons": otherscons,
-                },
-            )
+                othercon = OtherConsumption()
+                othercon.Colour = cons.Colour
+                othercon.Quality = cons.Quality
+                othercon.Quantity = consumedqty
+                othercon.Remark = remark
+                othercon.Date = datetime.date.today()
+                othercon.save()
 
-        if request.POST.get("submit"):
-            idee = request.POST.get("ID")
-            if idee:
-                idee = int(idee)
-            else:
-                idee = 0
-            consumedqty = int(request.POST.get("consumedqty"))
-            otherscons = {}
-            swit = int(request.POST.get("swit"))
-            stocks = {}
-            if not swit:
-                customer = request.POST.get("customer")
+        except Exception as e:
+            return HttpResponse(str(e))
+            return HttpResponse("Not Possible to Save, Quantity greater than exists", status=500)
 
-                ordertook = OrderList.objects.get(id=idee)
-                ordertook.BalanceQuantity -= consumedqty
-                ordertook.save()
-                for number in SerialNo.objects.filter(
-                    Customer=Customer.objects.get(CustomerName=customer)
-                ):
-                    for order in OrderList.objects.filter(SerialNo=number):
-                        stocks[order.id] = {
-                            "OrderNo": order.SerialNo.Order.OrderNo,
-                            "CustomerName": order.SerialNo.Customer.CustomerName,
-                            "Quality": order.SerialNo.Quality.Quality,
-                            "Colour": order.Colour.Colour,
-                            "OrderedQuantity": order.OrderedQuantity,
-                            "BalanceQuantity": order.BalanceQuantity,
-                            "Date": str(order.SerialNo.Date),
-                        }
-
-            else:
-
-                if idee <= 0:
-                    quality = request.POST.get("Quality")
-                    colour = request.POST.get("Colour")
-                    cons = OtherConsumption()
-                    cons.Quality = Quality.objects.get(Quality=quality)
-                    cons.Colour = Colour.objects.get(Colour=colour)
-                    cons.Quantity = consumedqty
-                    cons.save()
-                else:
-                    cons = OtherConsumption.objects.get(id=idee)
-                    cons.Quantity += consumedqty
-                    cons.save()
-
-                for number in OtherConsumption.objects.all():
-                    otherscons[number.id] = {
-                        "Quality": number.Quality.Quality,
-                        "Colour": number.Colour.Colour,
-                        "Quantity": number.Quantity,
-                    }
-            return render(
-                request,
-                "consumption_record.html",
-                context={
-                    "Orders": Orders,
-                    "Colours": Colours,
-                    "Qualities": Qualities,
-                    "Customers": Customers,
-                    "Others": Others,
-                    "Stocks": stocks,
-                    "Othercons": otherscons,
-                },
-            )
+        othercons = {}
+        for Stock in OfficeStock.objects.filter(Quantity__gte=1):
+            othercons[Stock.id] = {
+                "Quantity": Stock.Quantity,
+                "Colour": Stock.Colour.Colour,
+                "Quality": Stock.Quality.Quality
+            }
+        return render(
+            request,
+            "consumption_record.html",
+            context={
+                "Colours": Colours,
+                "Qualities": Qualities,
+                "Others": Others,
+                "Othercons": othercons,
+                "Stocks": othercons
+            },
+        )
     return render(
         request,
         "consumption_record.html",
@@ -334,14 +272,64 @@ def stock_movement(request):
         "Offices": json.dumps([office.WorkerName for office in Offices]),
     }
     if request.method == "POST":
+        if request.POST.get("STOCK"):
+            data = data(request)
+            StockList = request.POST.get("StockList")
+            ID = request.POST.get("ID")
+            if StockList and StockList != "{}":
+                StockList = ast.literal_eval(StockList)
+                if not ID:
+                    ID = max(StockList.keys()) + 1
+                else:
+                    ID = int(ID)
+            else:
+                StockList = {}
+                ID = 1
+            if data['Quantity'] > 0:
+                StockList[ID] = {
+                    "Colour": data["colour"],
+                    "Quantity": data["Quantity"],
+                }
+            BalanceStock = {}
+            if data['fromtype'] == "Dyeing":
+                for i, stock in enumerate(
+                        DyeingStock.objects.filter(Dyer=Jobworker.objects.get(WorkerName=data['fromName']),
+                                                   Quality=Quality.objects.get(Quality=data['Quality']),
+                                                   Colour=Colour.objects.get(Colour=data['colour']))):
+                    BalanceStock[i] = {
+                        "Quantity": stock.Quantity,
+                        "Quality": stock.Quality,
+                        "Colour": stock.Colour
+                    }
+            elif data['fromtype'] == "Finishing":
+                for i, stock in enumerate(
+                        FinishingStock.objects.filter(Finisher=Jobworker.objects.get(WorkerName=data['fromName']),
+                                                      Quality=Quality.objects.get(Quality=data['Quality']),
+                                                      Colour=Colour.objects.get(Colour=data['colour']))):
+                    BalanceStock[i] = {
+                        "Quantity": stock.Quantity,
+                        "Quality": stock.Quality,
+                        "Colour": stock.Colour
+                    }
+            return render(
+                request,
+                "stock_movement.html",
+                context={
+                    **context,
+                    **data,
+                    "BalanceStock": BalanceStock,
+                    "StockList": StockList,
+                },
+            )
+
         if request.POST.get("SEARCH"):
             challan = Challan.objects.get(ChallanNo=int(request.POST.get("challan")))
             StockList, data = {}, {}
             data["Quality"] = challan.Quality.Quality
             data["fromtype"] = challan.FromName.Role
             data["fromName"] = challan.FromName.WorkerName
-            data["totype"] = challan.FromName.Role
-            data["toName"] = challan.FromName.WorkerName
+            data["totype"] = challan.ToName.Role
+            data["toName"] = challan.ToName.WorkerName
             data["ChallanNo"] = challan.ChallanNo
             for idx, movement in enumerate(Movement.objects.filter(Challan=challan)):
                 StockList[idx + 1] = {
@@ -412,14 +400,20 @@ def stock_movement(request):
                 challan = Challan.objects.get(ChallanNo=data["ChallanNo"])
                 From, To = getStockTable(challan)
                 MovementList = Movement.objects.filter(Challan=challan)
-                for movement in MovementList:
-                    changeFrom = From.get(Colour=movement.Colour)
-                    changeFrom.Quantity += movement.Quantity
-                    changeTo = To.get(Colour=movement.Colour)
-                    changeTo.Quantity -= movement.Quantity
-                    changeTo.save()
-                    changeFrom.save()
-                MovementList.delete()
+                try:
+                    with transaction.atomic():
+                        for movement in MovementList:
+                            if challan.FromName.Role != 'Factory':
+                                changeFrom = From.get(Colour=movement.Colour)
+                                changeFrom.Quantity -= movement.Quantity
+                            changeTo = To.get(Colour=movement.Colour)
+                            changeTo.Quantity += movement.Quantity
+                            changeTo.save()
+                            if challan.FromName.Role != 'Factory':
+                                changeFrom.save()
+                        MovementList.delete()
+                except Exception as e:
+                    return HttpResponse(str(e))
             except:
                 challan = Challan()
                 challan.ChallanNo = data["ChallanNo"]
@@ -428,18 +422,25 @@ def stock_movement(request):
                 challan.Quality = Quality.objects.get(Quality=data["Quality"])
                 challan.save()
             From, To = getStockTable(challan)
-            for key, value in StockList.items():
-                movement = Movement()
-                movement.Challan = challan
-                movement.Colour = Colour.objects.get(Colour=value["Colour"])
-                movement.Quantity = value["Quantity"]
-                changeFrom = From.get(Colour=movement.Colour)
-                changeFrom.Quantity -= movement.Quantity
-                changeTo = To.get(Colour=movement.Colour)
-                changeTo.Quantity += movement.Quantity
-                changeTo.save()
-                changeFrom.save()
-                movement.save()
+            try:
+                with transaction.atomic():
+                    for key, value in StockList.items():
+                        movement = Movement()
+                        movement.Challan = challan
+                        movement.Colour = Colour.objects.get(Colour=value["Colour"])
+                        movement.Quantity = value["Quantity"]
+                        movement.Date = datetime.date.today()
+                        if challan.FromName.Role != 'Factory':
+                            changeFrom = From.get(Colour=movement.Colour)
+                            changeFrom.Quantity -= movement.Quantity
+                        changeTo = To.get(Colour=movement.Colour)
+                        changeTo.Quantity += movement.Quantity
+                        changeTo.save()
+                        if challan.FromName.Role != 'Factory':
+                            changeFrom.save()
+                        movement.save()
+            except Exception as e:
+                return HttpResponse(str(e))
 
     return render(
         request,
@@ -448,124 +449,3 @@ def stock_movement(request):
             **context,
         },
     )
-
-
-def production_input(request):
-    Qualities = Quality.objects.all()
-    Colours = Colour.objects.all()
-    Factories = Jobworker.objects.filter(Role="Factory")
-
-    context = {
-        "Colours": Colours,
-        "Qualities": Qualities,
-        "Factories": Factories,
-    }
-    if request.method == "POST":
-        quality = request.POST.get("Quality")
-        colour = request.POST.get("Colour")
-        factory = Jobworker.objects.get(WorkerName=request.POST.get("Factory"))
-        Quantity = int(request.POST.get("Quantity", 0))
-        try:
-            stocks = FactoryStock.objects.get(
-                Factory=factory,
-                Quality=Quality.objects.get(Quality=quality),
-                Colour=Colour.objects.get(Colour=colour),
-            )
-            stocks.Quantity += Quantity
-            stocks.save()
-
-        except:
-            stock = FactoryStock()
-            stock.Factory = factory
-            stock.Quality = Quality.objects.get(Quality=quality)
-            stock.Colour = Colour.objects.get(Colour=colour)
-            stock.Quantity = Quantity
-            stock.save()
-
-    return render(
-        request,
-        "production_record.html",
-        context={**context},
-    )
-
-
-def edit_order(request):
-    Colours = Colour.objects.all()
-    context = {
-        "Colours": Colours,
-    }
-    if request.method == "POST":
-        data = collect(request)
-        sNo = SerialNo.objects.get(id=int(request.POST.get("SerialNo")))
-        context["SerialNo"] = sNo
-        if request.POST.get("search"):
-            data["OrderList"] = {}
-            for index, number in enumerate(OrderList.objects.filter(SerialNo=sNo)):
-                # print(index, number)
-                data["OrderList"][index + 1] = {
-                    "Colour": number.Colour.Colour,
-                    "OrderedQuantity": number.OrderedQuantity,
-                    "BalanceQuantity":number.BalanceQuantity
-                }
-            return render(
-                request,
-                "edit_order.html",
-                context={
-                    **context,
-                    **data,
-                },
-            )
-
-        if request.POST.get("save"):
-            print(data["OrderList"])
-            if not data["OrderList"].get(data["ID"],0): 
-                data["OrderList"][data["ID"]]={
-                    # "OrderedQuantity":data["Quantity"],
-                    # "BalanceQuantity":data["Quantity"]
-                    "OrderedQuantity":0,
-                    "BalanceQuantity":0
-            }
-            temp=data["OrderList"][data["ID"]]
-            data["OrderList"][data["ID"]]= {
-                "Colour": data["Colour"],
-                "OrderedQuantity": data["Quantity"],
-                "BalanceQuantity": temp["BalanceQuantity"]-temp["OrderedQuantity"]+data["Quantity"]
-            }
-            return render(
-                request,
-                "edit_order.html",
-                context={
-                    **context,
-                    **data,
-                },
-            )
-
-        elif request.POST.get("remove"):
-            del data["OrderList"][data["ID"]]
-            return render(
-                request,
-                "edit_order.html",
-                context={
-                    **context,
-                    **data,
-                },
-            )
-
-        elif request.POST.get("submit"):
-            try:
-                with transaction.atomic():
-                    OrderList.objects.filter(SerialNo=sNo).delete()
-                    for key, value in data["OrderList"].items():
-                        OrderList_obj = OrderList()
-                        OrderList_obj.SerialNo = sNo
-                        OrderList_obj.Colour = Colour.objects.get(
-                            Colour=value["Colour"]
-                        )
-                        OrderList_obj.OrderedQuantity = value["OrderedQuantity"]
-                        OrderList_obj.BalanceQuantity = value["BalanceQuantity"]
-                        OrderList_obj.save()
-                    return redirect("edit-order")
-            except:
-                print("Error OCCURREDD")
-
-    return render(request, "edit_order.html")
