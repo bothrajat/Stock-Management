@@ -15,7 +15,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Set the entrypoint script
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
 
 # Default command
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
